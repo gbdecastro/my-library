@@ -11,17 +11,16 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface AuthorMapper {
 
-    @Mapping(target = "books", ignore = true)
     AuthorResponse toResponse(Author author);
 
     List<AuthorResponse> toResponseList(Collection<Author> author);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "bookAuthors", ignore = true)
+    @Mapping(target = "books", ignore = true)
     Author requestToAuthor(AuthorRequest authorRequest);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "bookAuthors", ignore = true)
+    @Mapping(target = "books", ignore = true)
     Author update(@MappingTarget Author author, Author authorUpdate);
 
 }

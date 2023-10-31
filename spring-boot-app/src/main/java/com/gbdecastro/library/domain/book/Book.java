@@ -1,21 +1,25 @@
 package com.gbdecastro.library.domain.book;
 
 
-import com.gbdecastro.library.domain.bookAuthor.BookAuthor;
-import com.gbdecastro.library.domain.bookSubject.BookSubject;
+import com.gbdecastro.library.domain.author.Author;
 import com.gbdecastro.library.domain.shared.Audit;
+import com.gbdecastro.library.domain.subject.Subject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,12 +46,26 @@ public class Book extends Audit {
     @Column(nullable = false, length = 4)
     private String publicationYear;
 
-    @OneToMany(mappedBy = "book")
+    @ManyToMany(fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "book_author",
+            joinColumns = { @JoinColumn(name = "book_id") },
+            inverseJoinColumns = { @JoinColumn(name = "author_id") })
     @Builder.Default
-    private Set<BookAuthor> bookAuthors = new HashSet<>();
+    private Set<Author> authors = new HashSet<>();
 
-    @OneToMany(mappedBy = "book")
+    @ManyToMany(fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "book_subject",
+            joinColumns = { @JoinColumn(name = "book_id") },
+            inverseJoinColumns = { @JoinColumn(name = "subject_id") })
     @Builder.Default
-    private Set<BookSubject> bookSubjects = new HashSet<>();
+    private Set<Subject> subjects = new HashSet<>();
 
 }

@@ -10,8 +10,8 @@ import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -83,7 +83,7 @@ public class AuthorController implements AuthorApi {
     }
 
     @Override
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<EntityModel<AuthorResponse>> update(Long id, @Valid @RequestBody AuthorRequest authorRequest) {
         AuthorResponse response =
                 mapper.toResponse(service.update(id, mapper.requestToAuthor(authorRequest)));

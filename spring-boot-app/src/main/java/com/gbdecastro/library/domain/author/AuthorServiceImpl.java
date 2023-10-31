@@ -12,6 +12,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static com.gbdecastro.library.domain.shared.utils.StringUtils.COMMA;
 
@@ -22,6 +23,7 @@ public class AuthorServiceImpl implements AuthorService {
     private AuthorRepository repository;
     @Autowired
     private AuthorMapper mapper;
+
     @Autowired
     private MessageContext messageContext;
 
@@ -40,14 +42,18 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    public List<Author> findAllByIds(Set<Long> ids) {
+        return this.repository.findAllById(ids);
+    }
+
+    @Override
     public Author findById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Author not found"));
+        return repository.findById(id).orElseThrow(() -> new EntityNotFoundException(messageContext.getMessage("author_not_found")));
     }
 
     @Override
     public Author update(Long id, Author toUpdate) {
         Author author = findById(id);
-
 
         author = mapper.update(author, toUpdate);
 
@@ -63,8 +69,8 @@ public class AuthorServiceImpl implements AuthorService {
     public void delete(Long id) {
         Author author = findById(id);
 
-        if(!author.getBookAuthors().isEmpty()){
-            throw new DomainException(HttpStatus.BAD_REQUEST.value(), "Author is presenting in some Books");
+        if(!author.getBooks().isEmpty()){
+            throw new DomainException(HttpStatus.BAD_REQUEST.value(),messageContext.getMessage("author_already_linked_a_book"));
         }
 
         repository.delete(author);

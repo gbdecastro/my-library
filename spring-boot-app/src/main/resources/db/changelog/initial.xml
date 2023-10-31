@@ -1,6 +1,6 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <changeSet author="gcastro (generated)" id="1698726500085-1">
+    <changeSet author="gcastro (generated)" id="1698770308647-1">
         <createTable tableName="author">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
@@ -16,7 +16,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="gcastro (generated)" id="1698726500085-2">
+    <changeSet author="gcastro (generated)" id="1698770308647-2">
         <createTable tableName="book">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
@@ -38,37 +38,27 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="gcastro (generated)" id="1698726500085-3">
+    <changeSet author="gcastro (generated)" id="1698770308647-3">
         <createTable tableName="book_author">
-            <column autoIncrement="true" name="id" type="BIGINT">
+            <column name="book_id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="created_at" type="datetime">
-                <constraints nullable="false"/>
+            <column name="author_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="updated_at" type="datetime">
-                <constraints nullable="false"/>
-            </column>
-            <column name="author_id" type="BIGINT"/>
-            <column name="book_id" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet author="gcastro (generated)" id="1698726500085-4">
+    <changeSet author="gcastro (generated)" id="1698770308647-4">
         <createTable tableName="book_subject">
-            <column autoIncrement="true" name="id" type="BIGINT">
+            <column name="book_id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="created_at" type="datetime">
-                <constraints nullable="false"/>
+            <column name="subject_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="updated_at" type="datetime">
-                <constraints nullable="false"/>
-            </column>
-            <column name="book_id" type="BIGINT"/>
-            <column name="subject_id" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet author="gcastro (generated)" id="1698726500085-5">
+    <changeSet author="gcastro (generated)" id="1698770308647-5">
         <createTable tableName="subject">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
@@ -84,36 +74,26 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="gcastro (generated)" id="1698726500085-6">
-        <createIndex indexName="FK6hw14qin75gv5cokk6avsfyrj" tableName="book_subject">
-            <column name="book_id"/>
-        </createIndex>
-    </changeSet>
-    <changeSet author="gcastro (generated)" id="1698726500085-7">
+    <changeSet author="gcastro (generated)" id="1698770308647-6">
         <createIndex indexName="FKbjqhp85wjv8vpr0beygh6jsgo" tableName="book_author">
             <column name="author_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="gcastro (generated)" id="1698726500085-8">
+    <changeSet author="gcastro (generated)" id="1698770308647-7">
         <createIndex indexName="FKfpcbephalsmt02u6ggqrokhqn" tableName="book_subject">
             <column name="subject_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="gcastro (generated)" id="1698726500085-9">
-        <createIndex indexName="FKhwgu59n9o80xv75plf9ggj7xn" tableName="book_author">
-            <column name="book_id"/>
-        </createIndex>
-    </changeSet>
-    <changeSet author="gcastro (generated)" id="1698726500085-10">
+    <changeSet author="gcastro (generated)" id="1698770308647-8">
         <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="book_subject" constraintName="FK6hw14qin75gv5cokk6avsfyrj" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="id" referencedTableName="book" validate="true"/>
     </changeSet>
-    <changeSet author="gcastro (generated)" id="1698726500085-11">
+    <changeSet author="gcastro (generated)" id="1698770308647-9">
         <addForeignKeyConstraint baseColumnNames="author_id" baseTableName="book_author" constraintName="FKbjqhp85wjv8vpr0beygh6jsgo" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="id" referencedTableName="author" validate="true"/>
     </changeSet>
-    <changeSet author="gcastro (generated)" id="1698726500085-12">
+    <changeSet author="gcastro (generated)" id="1698770308647-10">
         <addForeignKeyConstraint baseColumnNames="subject_id" baseTableName="book_subject" constraintName="FKfpcbephalsmt02u6ggqrokhqn" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="id" referencedTableName="subject" validate="true"/>
     </changeSet>
-    <changeSet author="gcastro (generated)" id="1698726500085-13">
+    <changeSet author="gcastro (generated)" id="1698770308647-11">
         <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="book_author" constraintName="FKhwgu59n9o80xv75plf9ggj7xn" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="id" referencedTableName="book" validate="true"/>
     </changeSet>
 </databaseChangeLog>

@@ -1,7 +1,7 @@
 package com.gbdecastro.library.application.rest.controller.book;
 
 import com.gbdecastro.library.application.rest.controller.author.AuthorResponse;
-import com.gbdecastro.library.domain.subject.Subject;
+import com.gbdecastro.library.application.rest.controller.subject.SubjectResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,5 +27,5 @@ public class BookResponse {
     private Set<AuthorResponse> authors = new HashSet<>();
 
     @Builder.Default
-    private Set<Subject> subjects = new HashSet<>();
+    private Set<SubjectResponse> subjects = new HashSet<>();
 }

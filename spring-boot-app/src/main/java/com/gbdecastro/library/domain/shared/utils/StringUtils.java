@@ -11,6 +11,6 @@ public abstract class StringUtils {
     }
 
     public static boolean isGreaterThan(String value, Integer limit) {
-        return !StringUtils.isEmpty(value) || value.length() > limit;
+        return !StringUtils.isEmpty(value) && value.trim().length() > limit;
     }
 }
