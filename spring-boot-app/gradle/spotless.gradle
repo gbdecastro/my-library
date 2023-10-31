@@ -1,0 +1,19 @@
+apply plugin: "com.diffplug.spotless"
+spotless {
+
+    java {
+        target('src/**/*.java')
+        eclipse().configFile('gradle/formaters/formatting.xml')
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+
+    format 'misc', {
+        target ('gradle/**/*.gradle', 'src/**/*.gradle', '**/.gitignore',
+                '**/*.yaml', '**/*.yml', '**/*.xml')
+        targetExclude ('.idea/**', 'build/**', 'out/**', '.gradle/**', '.git/**')
+        indentWithSpaces(4)
+        trimTrailingWhitespace()
+    }
+}

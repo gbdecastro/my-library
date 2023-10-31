@@ -1,0 +1,25 @@
+spring:
+  profiles:
+    default: "dev"
+  messages:
+    basename: lang/messages
+server:
+  compression:
+    enabled: true
+    mime-types:
+      - text/html
+      - text/xml
+      - text/plain
+      - text/css
+      - text/javascript/
+      - application/javascript
+      - application/json
+      - image/svg+xml
+      - application/x-font-ttf
+    min-response-size: 2048
+spring-doc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method

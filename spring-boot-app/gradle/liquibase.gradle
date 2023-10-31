@@ -1,0 +1,53 @@
+def extractDatabaseName(String jdbcUrl) {
+    String databaseName = URI.create(jdbcUrl.substring(5)).getPath().replace("/","")
+    return databaseName
+}
+
+def extractDatabaseHost(String jdbcUrl) {
+    return URI.create(jdbcUrl.substring(5)).getHost()
+}
+
+def extractDatabasePort(String jdbcUrl) {
+    return URI.create(jdbcUrl.substring(5)).getPort()
+}
+
+liquibase {
+
+    if (project.hasProperty("runList")) {
+        activities {
+            if (project.hasProperty("changeLogFile") && project.hasProperty("url")
+                    && project.hasProperty("username") && project.hasProperty("password")) {
+                def jdbcUrl = project.ext.url
+                def databaseInfo = String.format("\nHost: %s\nPort: %d\nUser: %s\nDatabase: %s", extractDatabaseHost(jdbcUrl), extractDatabasePort(jdbcUrl), project.ext.username, extractDatabaseName(jdbcUrl))
+                println databaseInfo
+
+                main {
+                    changelogFile project.ext.changeLogFile
+                    url project.ext.url
+                    username project.ext.username
+                    password project.ext.password
+                    driver "com.mysql.cj.jdbc.Driver"
+                }
+            } else if (project.ext.runList == "main") {
+                throw new Exception("Please provide the following parameters: changeLogFile, url, username and password")
+            }
+            if (project.hasProperty("changeLogFile") && project.hasProperty("url") && project.hasProperty("username") && project.hasProperty("password")
+                    && project.hasProperty("referenceUrl") && project.hasProperty("referenceUsername") && project.hasProperty("referencePassword")) {
+                mainDiff {
+                    changelogFile project.ext.changeLogFile
+                    url project.ext.url
+                    username project.ext.username
+                    password project.ext.password
+                    driver "com.mysql.cj.jdbc.Driver"
+                    referenceUrl project.ext.referenceUrl
+                    referenceUsername project.ext.referenceUsername
+                    referencePassword project.ext.referencePassword
+                    referenceDriver "com.mysql.cj.jdbc.Driver"
+                }
+            } else if (project.ext.runList == "mainDiff") {
+                throw new Exception("Please provide the following parameters: changeLogFile, url, username, password, referenceUrl, referenceUsername and referencePassword")
+            }
+        }
+        runList = project.ext.runList
+    }
+}
