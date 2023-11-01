@@ -21,6 +21,7 @@ const routes: Routes = [
                 loadChildren: () =>
                     import("./subjects/subjects.module").then((m) => m.SubjectsModule),
             },
+            { path: "**", redirectTo: "authors" },
         ],
     },
     { path: "**", component: NotFoundComponent },

@@ -10,9 +10,20 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { ReactiveFormsModule } from "@angular/forms";
 import { TranslateModule } from "@ngx-translate/core";
+import { MatTableModule } from "@angular/material/table";
+import { LoaderModule } from "@layout/loader/loader.module";
+import { MatSortModule } from "@angular/material/sort";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { UpsertComponent } from "./upsert/upsert.component";
+import { NgSelectModule } from "@ng-select/ng-select";
+import { MatChipsModule } from "@angular/material/chips";
+import { MatIconModule } from "@angular/material/icon";
+import { BookPipesModule } from "@app/core/books/pipes/book-pipes.module";
+import { NgbTooltipModule } from "@ng-bootstrap/ng-bootstrap";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
-    declarations: [BooksComponent],
+    declarations: [BooksComponent, UpsertComponent],
     imports: [
         CommonModule,
         BooksRoutingModule,
@@ -23,6 +34,16 @@ import { TranslateModule } from "@ngx-translate/core";
         MatInputModule,
         ReactiveFormsModule,
         TranslateModule,
+        MatTableModule,
+        LoaderModule,
+        MatSortModule,
+        MatPaginatorModule,
+        NgSelectModule,
+        MatChipsModule,
+        MatIconModule,
+        BookPipesModule,
+        NgbTooltipModule,
+        MatTooltipModule,
     ],
 })
 export class BooksModule {}

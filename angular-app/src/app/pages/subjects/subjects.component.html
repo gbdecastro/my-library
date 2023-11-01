@@ -94,7 +94,7 @@
             </ng-container>
 
             <tr
-                *matHeaderRowDef="columns"
+                *matHeaderRowDef="columns; sticky: true"
                 mat-header-row></tr>
             <tr
                 *matRowDef="let row; columns: columns"

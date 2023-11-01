@@ -1,0 +1,14 @@
+.mat-mdc-cell {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.mat-column-authors,
+.mat-column-subjects{
+    max-width: 300px;
+}
+
+.mat-column-id {
+    height: 60px;
+}

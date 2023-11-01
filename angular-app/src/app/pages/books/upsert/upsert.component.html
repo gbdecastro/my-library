@@ -1,0 +1,177 @@
+<h2 mat-dialog-title>
+    {{ "BOOKS.MANAGEMENT" | translate }}
+</h2>
+<mat-dialog-content class="mat-typography">
+    <div
+        [formGroup]="form"
+        class="d-flex flex-column gap-3 align-items-center justify-content-between p-5">
+        <mat-form-field class="w-100">
+            <mat-label>
+                {{ "BOOKS.TITLE" | translate }}
+            </mat-label>
+            <input
+                formControlName="title"
+                matInput
+                required />
+            <button
+                (click)="title.setValue('')"
+                *ngIf="title.value"
+                aria-label="Clear"
+                class="clear-title"
+                data-cy="title-clear"
+                mat-icon-button
+                matSuffix>
+                <feather-icon name="x"></feather-icon>
+            </button>
+            <mat-error *ngIf="title.hasError('required')">
+                {{ "COMMON.REQUIRED_FIELD" | translate }}
+            </mat-error>
+            <mat-error *ngIf="title.hasError('maxlength')">
+                {{ "COMMON.MAX_LENGTH_ERROR" | translate: { max: 40 } }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="w-100">
+            <mat-label>
+                {{ "BOOKS.EDITION" | translate }}
+            </mat-label>
+            <input
+                formControlName="edition"
+                matInput
+                required
+                type="number" />
+            <button
+                (click)="edition.setValue('')"
+                *ngIf="edition.value"
+                aria-label="Clear"
+                class="clear-edition"
+                data-cy="edition-clear"
+                mat-icon-button
+                matSuffix>
+                <feather-icon name="x"></feather-icon>
+            </button>
+            <mat-error *ngIf="edition.hasError('required')">
+                {{ "COMMON.REQUIRED_FIELD" | translate }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="w-100">
+            <mat-label>
+                {{ "BOOKS.PUBLICATION_YEAR" | translate }}
+            </mat-label>
+            <input
+                [maxlength]="4"
+                [minLength]="4"
+                formControlName="publicationYear"
+                matInput
+                required />
+            <button
+                (click)="publicationYear.setValue('')"
+                *ngIf="publicationYear.value"
+                aria-label="Clear"
+                class="clear-publicationYear"
+                data-cy="publicationYear-clear"
+                mat-icon-button
+                matSuffix>
+                <feather-icon name="x"></feather-icon>
+            </button>
+            <mat-error *ngIf="publicationYear.hasError('required')">
+                {{ "COMMON.REQUIRED_FIELD" | translate }}
+            </mat-error>
+            <mat-error *ngIf="publicationYear.hasError('maxlength')">
+                {{ "COMMON.MAX_LENGTH_ERROR" | translate: { max: 4 } }}
+            </mat-error>
+            <mat-error *ngIf="publicationYear.hasError('minlength')">
+                {{ "COMMON.MIN_LENGTH_ERROR" | translate: { max: 4 } }}
+            </mat-error>
+        </mat-form-field>
+
+        <div class="w-100">
+            <ng-select
+                [clearable]="true"
+                [closeOnSelect]="false"
+                [items]="authorOptions"
+                [loading]="authorOptions.length === 0"
+                [multiple]="true"
+                [placeholder]="'MENU.AUTHORS' | translate"
+                [searchable]="true"
+                bindLabel="name"
+                bindValue="id"
+                formControlName="authors"
+                required>
+                <ng-template
+                    let-clear="clear"
+                    let-items="items"
+                    ng-multi-label-tmp>
+                    <mat-chip-row
+                        *ngFor="let item of items"
+                        class="m-2">
+                        {{ item.name }}
+                        <button
+                            (click)="clear(item)"
+                            class="ng-value-icon right"
+                            matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip-row>
+                </ng-template>
+            </ng-select>
+            <mat-error *ngIf="authors.touched && authors.hasError('required')">
+                {{ "COMMON.REQUIRED_FIELD" | translate }}
+            </mat-error>
+        </div>
+
+        <div class="w-100">
+            <ng-select
+                [clearable]="true"
+                [closeOnSelect]="false"
+                [items]="subjectOptions"
+                [loading]="subjectOptions.length === 0"
+                [multiple]="true"
+                [placeholder]="'MENU.SUBJECTS' | translate"
+                [searchable]="true"
+                bindLabel="description"
+                bindValue="id"
+                formControlName="subjects"
+                required>
+                <ng-template
+                    let-clear="clear"
+                    let-items="items"
+                    ng-multi-label-tmp>
+                    <mat-chip-row
+                        *ngFor="let item of items"
+                        class="m-2">
+                        {{ item.description }}
+                        <button
+                            (click)="clear(item)"
+                            class="ng-value-icon right"
+                            matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip-row>
+                </ng-template>
+            </ng-select>
+            <mat-error *ngIf="subjects.touched && subjects.hasError('required')">
+                {{ "COMMON.REQUIRED_FIELD" | translate }}
+            </mat-error>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <div class="d-flex justify-content-end flex-wrap py-2 px-5 gap-3 w-100">
+        <button
+            [disabled]="form.invalid"
+            [mat-dialog-close]="form.value"
+            color="primary"
+            mat-flat-button>
+            {{ "COMMON.SAVE" | translate }}
+        </button>
+        <button
+            cdkFocusInitial
+            mat-dialog-close
+            mat-flat-button>
+            {{ "COMMON.CLOSE" | translate }}
+        </button>
+    </div>
+</mat-dialog-actions>

@@ -1,1 +1,185 @@
-<p>books works!</p>
+<app-loader *ngIf="loading"></app-loader>
+
+<div [hidden]="loading">
+    <div class="my-4 d-flex flex-wrap justify-content-between">
+        <ng-container [formGroup]="formFilter">
+            <mat-form-field>
+                <mat-label>
+                    {{ "COMMON.FILTER" | translate }}
+                </mat-label>
+                <input
+                    formControlName="search"
+                    matInput />
+                <button
+                    (click)="search.setValue('')"
+                    *ngIf="search.value"
+                    aria-label="Clear"
+                    class="clear-filter"
+                    data-cy="search-clear"
+                    mat-icon-button
+                    matSuffix>
+                    <feather-icon name="x"></feather-icon>
+                </button>
+            </mat-form-field>
+        </ng-container>
+        <button
+            (click)="openManagementDialog()"
+            color="primary"
+            mat-raised-button>
+            {{ "BOOKS.ADD" | translate }}
+        </button>
+    </div>
+    <div class="table-responsive">
+        <table
+            [dataSource]="bookData"
+            fixedLayout
+            mat-table
+            matSort>
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+                <th
+                    *matHeaderCellDef
+                    mat-header-cell
+                    mat-sort-header>
+                    #
+                </th>
+                <td
+                    *matCellDef="let row"
+                    mat-cell>
+                    {{ row.id }}
+                </td>
+            </ng-container>
+
+            <!-- Title Column -->
+            <ng-container matColumnDef="title">
+                <th
+                    *matHeaderCellDef
+                    mat-header-cell
+                    mat-sort-header>
+                    {{ "BOOKS.TITLE" | translate }}
+                </th>
+                <td
+                    *matCellDef="let row"
+                    mat-cell>
+                    {{ row.title }}
+                </td>
+            </ng-container>
+
+            <!-- Edition Column -->
+            <ng-container matColumnDef="edition">
+                <th
+                    *matHeaderCellDef
+                    mat-header-cell
+                    mat-sort-header>
+                    {{ "BOOKS.EDITION" | translate }}
+                </th>
+                <td
+                    *matCellDef="let row"
+                    mat-cell>
+                    {{ row.edition }}
+                </td>
+            </ng-container>
+
+            <!-- Publication Year Column -->
+            <ng-container matColumnDef="publicationYear">
+                <th
+                    *matHeaderCellDef
+                    mat-header-cell
+                    mat-sort-header>
+                    {{ "BOOKS.PUBLICATION_YEAR" | translate }}
+                </th>
+                <td
+                    *matCellDef="let row"
+                    mat-cell>
+                    {{ row.publicationYear }}
+                </td>
+            </ng-container>
+
+            <!-- Authors Column -->
+            <ng-container matColumnDef="authors">
+                <th
+                    *matHeaderCellDef
+                    mat-header-cell
+                    mat-sort-header>
+                    {{ "MENU.AUTHORS" | translate }}
+                </th>
+                <td
+                    *matCellDef="let row"
+                    mat-cell>
+                    <div
+                        [matTooltip]="row.authors | authors"
+                        class="text-truncate">
+                        {{ row.authors | authors }}
+                    </div>
+                </td>
+            </ng-container>
+
+            <!-- Subjects Column -->
+            <ng-container matColumnDef="subjects">
+                <th
+                    *matHeaderCellDef
+                    mat-header-cell
+                    mat-sort-header>
+                    {{ "MENU.SUBJECTS" | translate }}
+                </th>
+                <td
+                    *matCellDef="let row"
+                    mat-cell>
+                    <div
+                        [matTooltip]="row.subjects | subjects"
+                        class="text-truncate">
+                        {{ row.subjects | subjects }}
+                    </div>
+                </td>
+            </ng-container>
+
+            <!-- action Column -->
+            <ng-container matColumnDef="action">
+                <th
+                    *matHeaderCellDef
+                    mat-header-cell
+                    mat-sort-header>
+                    {{ "COMMON.ACTION" | translate }}
+                </th>
+                <td
+                    *matCellDef="let row"
+                    mat-cell>
+                    <button
+                        (click)="openManagementDialog(row)"
+                        mat-icon-button>
+                        <feather-icon
+                            class="cursor-pointer"
+                            name="edit-2"></feather-icon>
+                    </button>
+                    <button
+                        (click)="onDelete(row)"
+                        color="warn"
+                        mat-icon-button>
+                        <feather-icon
+                            class="cursor-pointer"
+                            name="trash"></feather-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr
+                *matHeaderRowDef="columns; sticky: true"
+                mat-header-row></tr>
+            <tr
+                *matRowDef="let row; columns: columns"
+                mat-row></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr
+                *matNoDataRow
+                class="mat-row">
+                <td
+                    class="mat-cell p-5 text-center"
+                    colspan="2">
+                    {{ "COMMON.NO_DATA_FOUND" | translate }} "{{ search.value }}"
+                </td>
+            </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    </div>
+</div>

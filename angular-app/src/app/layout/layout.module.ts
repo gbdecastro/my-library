@@ -6,6 +6,7 @@ import { TranslateModule } from "@ngx-translate/core";
 import { BaseComponent } from "./base/base.component";
 import { MatTabsModule } from "@angular/material/tabs";
 import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
     declarations: [BaseComponent],
@@ -16,6 +17,7 @@ import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
         MatButtonModule,
         MatTabsModule,
         NgbTooltip,
+        MatTooltipModule,
     ],
     exports: [BaseComponent],
 })

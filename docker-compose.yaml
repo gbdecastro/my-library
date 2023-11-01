@@ -19,6 +19,9 @@ services:
       context: ./spring-boot-app
       dockerfile: dockerfile
     container_name: spring_boot_app
+    environment:
+      # OVERWRITE
+      - SPRING_DATASOURCE_URL=jdbc:mysql://library-mysql:3306/librarydb?createDatabaseIfNotExist=true
     ports:
       - "8080:8080"
     depends_on:

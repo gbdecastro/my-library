@@ -6,6 +6,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
 @import "/node_modules/flag-icons/css/flag-icons.min.css";
+@import "~@ng-select/ng-select/themes/material.theme.css";
 
 .cursor-pointer{
   cursor: pointer !important;

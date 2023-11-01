@@ -12,6 +12,7 @@ import { I18N_EN } from "./core/i18n/en/en";
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from "@angular/material/form-field";
 import { HttpClientModule } from "@angular/common/http";
 import { ApiInterceptorModule } from "@app/core/interceptor/api.interceptor.module";
+import { NgSelectModule } from "@ng-select/ng-select";
 
 export class TranslateFileLoader implements TranslateLoader {
     getTranslation(lang: string): Observable<any> {
@@ -39,6 +40,7 @@ export class TranslateFileLoader implements TranslateLoader {
         }),
         HttpClientModule,
         ApiInterceptorModule,
+        NgSelectModule,
     ],
     providers: [
         {
