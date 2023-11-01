@@ -1,19 +1,21 @@
-import { HTTP_INTERCEPTORS, HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClient } from "@angular/common/http";
 import { HttpClientTestingModule, HttpTestingController } from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
-import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { TranslateLoader, TranslateModule, TranslateService } from "@ngx-translate/core";
 import { catchError, of } from "rxjs";
 import { ApiInterceptor } from "./api.interceptor";
 import { RouterTestingModule } from "@angular/router/testing";
 import { SnackBarService } from "../../layout/snack-bar/snack-bar.service";
 import { TranslateFileLoader } from "../../app.module";
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import { SnackBarModule } from "@layout/snack-bar/snack-bar.module";
 
 describe(`[U] ${ApiInterceptor.name} unit tests`, () => {
     let httpClient: HttpClient;
     let httpTestingController: HttpTestingController;
     let snackBarService: SnackBarService;
     let translateService: TranslateService;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let interceptor: ApiInterceptor;
     const endpoint = "http://localhost:3000/api/info";
 
@@ -21,7 +23,8 @@ describe(`[U] ${ApiInterceptor.name} unit tests`, () => {
         TestBed.configureTestingModule({
             imports: [
                 HttpClientTestingModule,
-                MatSnackBarModule,
+                SnackBarModule,
+                NoopAnimationsModule,
                 RouterTestingModule.withRoutes([]),
                 TranslateModule.forRoot({
                     loader: {
@@ -66,7 +69,7 @@ describe(`[U] ${ApiInterceptor.name} unit tests`, () => {
         const http_code = 0;
 
         spyOn(snackBarService, "openSnackBar").withArgs({
-            message: translateService.instant("BACKEND_ERRORS.COMMON.CHECK_YOUR_CONNECTION"),
+            message: translateService.instant("COMMON.CHECK_YOUR_CONNECTION"),
             type: "error",
         });
 
@@ -94,7 +97,7 @@ describe(`[U] ${ApiInterceptor.name} unit tests`, () => {
         const http_code = 500;
 
         spyOn(snackBarService, "openSnackBar").withArgs({
-            message: "Message",
+            message: translateService.instant("COMMON.UNKNOWN_ERROR"),
             type: "error",
         });
 
@@ -119,18 +122,27 @@ describe(`[U] ${ApiInterceptor.name} unit tests`, () => {
     });
 
     it("should show a common backend errors", () => {
-        const errorResponse: HttpErrorResponse = new HttpErrorResponse({
-            status: 400,
-            error: { messageCode: "ERROR" },
+        const http_code = 400;
+
+        spyOn(snackBarService, "openSnackBar").and.callThrough();
+
+        httpClient
+            .get(endpoint)
+            .pipe(
+                catchError((error: any) => {
+                    expect(error.message).toEqual(
+                        `Http failure response for ${endpoint}: ${http_code} `
+                    );
+                    expect(snackBarService.openSnackBar).toHaveBeenCalled();
+                    return of(error);
+                })
+            )
+            .subscribe();
+
+        const httpRequest = httpTestingController.expectOne(endpoint);
+
+        httpRequest.error(new ProgressEvent(`${http_code}`), {
+            status: http_code,
         });
-
-        spyOn(snackBarService, "openSnackBar").withArgs({
-            message: "Message Error",
-            type: "error",
-        });
-
-        interceptor.backendError(errorResponse);
-
-        expect(snackBarService.openSnackBar).toHaveBeenCalled();
     });
 });

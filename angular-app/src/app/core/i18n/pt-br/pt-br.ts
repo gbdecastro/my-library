@@ -1,4 +1,4 @@
-export const LANG_PT_BR = "pt";
+export const LANG_PT_BR = "pt-br";
 export const I18N_PTBR = {
     MENU: {
         BOOKS: "Livros",

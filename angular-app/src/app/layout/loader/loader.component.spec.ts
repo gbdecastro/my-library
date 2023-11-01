@@ -2,21 +2,21 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 import { LoaderComponent } from "./loader.component";
+import { FeatherModule } from "angular-feather";
+import { allIcons } from "angular-feather/icons";
 
 describe("[U] - LoaderComponent", () => {
     let component: LoaderComponent;
     let fixture: ComponentFixture<LoaderComponent>;
-    let nativeElement: Element;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             declarations: [LoaderComponent],
-            imports: [MatProgressSpinnerModule],
+            imports: [MatProgressSpinnerModule, FeatherModule.pick(allIcons)],
         }).compileComponents();
 
         fixture = TestBed.createComponent(LoaderComponent);
         component = fixture.componentInstance;
-        nativeElement = fixture.debugElement.nativeElement;
 
         fixture.detectChanges();
     });
@@ -25,8 +25,10 @@ describe("[U] - LoaderComponent", () => {
         expect(component).toBeTruthy();
     });
 
-    it("should have a spinner with sifex logo", () => {
-        expect(nativeElement.querySelector(".spinner-progress-wait")).toBeTruthy();
-        expect(nativeElement.querySelector("img")).toBeTruthy();
+    it("should change img size", () => {
+        component.diameter = 50;
+        fixture.detectChanges();
+        const imgSize = component.imgSize;
+        expect(imgSize).toEqual(25);
     });
 });

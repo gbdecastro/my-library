@@ -9,8 +9,6 @@ import { NgSelectConfig } from "@ng-select/ng-select";
     styleUrls: ["./app.component.scss"],
 })
 export class AppComponent {
-    title = "angular-app";
-
     constructor(
         private readonly i18n: TranslateService,
         private config: NgSelectConfig

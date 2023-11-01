@@ -1,19 +1,18 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { RouterModule } from "@angular/router";
-import { TranslateLoader, TranslateModule, TranslateService } from "@ngx-translate/core";
-import { MenuComponent } from "../menu/menu.component";
-import { BaseComponent } from "./base.component";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { MatExpansionModule } from "@angular/material/expansion";
-import { CommonModule } from "@angular/common";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatIconModule } from "@angular/material/icon";
-import { MatButtonModule } from "@angular/material/button";
-import { MatSidenavModule } from "@angular/material/sidenav";
-import { NgbTooltipModule } from "@ng-bootstrap/ng-bootstrap";
-import { LayoutModule as LayoutCDKModule } from "@angular/cdk/layout";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { TranslateFileLoader } from "../../app.module";
+import {ComponentFixture, TestBed} from "@angular/core/testing";
+import {TranslateLoader, TranslateModule, TranslateService} from "@ngx-translate/core";
+import {BaseComponent} from "./base.component";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {CommonModule} from "@angular/common";
+import {MatButtonModule} from "@angular/material/button";
+import {MatSidenavModule} from "@angular/material/sidenav";
+
+import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {TranslateFileLoader} from "@app/app.module";
+import {MatTooltipModule} from "@angular/material/tooltip";
+import {MatTabsModule} from "@angular/material/tabs";
+import {LANG_PT_BR} from "@app/core/i18n/pt-br/pt-br";
+import {LANG_EN} from "@app/core/i18n/en/en";
+import {RouterTestingModule} from "@angular/router/testing";
 
 describe("[U] - BaseComponent", () => {
     let component: BaseComponent;
@@ -22,7 +21,7 @@ describe("[U] - BaseComponent", () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [BaseComponent, MenuComponent],
+            declarations: [BaseComponent],
             imports: [
                 BrowserAnimationsModule,
                 TranslateModule.forRoot({
@@ -31,22 +30,19 @@ describe("[U] - BaseComponent", () => {
                         useClass: TranslateFileLoader,
                     },
                 }),
-                RouterModule,
-                MatExpansionModule,
+                RouterTestingModule,
                 CommonModule,
-                MatDividerModule,
-                MatIconModule,
+                MatTooltipModule,
                 MatButtonModule,
+                MatTabsModule,
                 MatSidenavModule,
-                NgbTooltipModule,
-                LayoutCDKModule,
                 HttpClientTestingModule,
             ],
             providers: [],
         }).compileComponents();
 
         translate = TestBed.inject(TranslateService);
-        translate.use("pt-br");
+        translate.use(LANG_PT_BR);
 
         fixture = TestBed.createComponent(BaseComponent);
         component = fixture.componentInstance;
@@ -57,4 +53,14 @@ describe("[U] - BaseComponent", () => {
     it("should create", () => {
         expect(component).toBeTruthy();
     });
+
+    it("should change locale", ()=> {
+
+        spyOn(translate, "use").and.callThrough();
+
+        component.onLocale(LANG_EN);
+
+        expect(translate.use).toHaveBeenCalledWith(LANG_EN);
+
+    })
 });
