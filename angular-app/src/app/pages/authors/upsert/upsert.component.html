@@ -1,0 +1,51 @@
+<div mat-dialog-title>
+    {{ "AUTHORS.MANAGEMENT" | translate }}
+</div>
+<div
+    [formGroup]="form"
+    class="d-flex gap-3 align-items-center justify-content-between p-5"
+    mat-dialog-content>
+    <mat-form-field class="w-100">
+        <mat-label>
+            {{ "AUTHORS.NAME" | translate }}
+        </mat-label>
+        <input
+            formControlName="name"
+            matInput
+            required />
+        <button
+            (click)="name.setValue('')"
+            *ngIf="name.value"
+            aria-label="Clear"
+            class="clear-name"
+            data-cy="name-clear"
+            mat-icon-button
+            matSuffix>
+            <feather-icon name="x"></feather-icon>
+        </button>
+        <mat-error *ngIf="name.hasError('required')">
+            {{ "COMMON.REQUIRED_FIELD" | translate }}
+        </mat-error>
+        <mat-error *ngIf="name.hasError('maxlength')">
+            {{ "COMMON.MAX_LENGTH_ERROR" | translate: { max: 40 } }}
+        </mat-error>
+    </mat-form-field>
+</div>
+
+<div mat-dialog-actions>
+    <div class="d-flex justify-content-end flex-wrap py-2 px-5 gap-3 w-100">
+        <button
+            [disabled]="name.invalid"
+            [mat-dialog-close]="form.value"
+            color="primary"
+            mat-flat-button>
+            {{ "COMMON.SAVE" | translate }}
+        </button>
+        <button
+            [disabled]="name.invalid"
+            [mat-dialog-close]="form.value"
+            mat-flat-button>
+            {{ "COMMON.CLOSE" | translate }}
+        </button>
+    </div>
+</div>

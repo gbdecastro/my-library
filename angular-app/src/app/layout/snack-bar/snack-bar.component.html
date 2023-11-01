@@ -1,0 +1,29 @@
+<div [class]="getNotificationClass()">
+    <div class="start">
+        <div class="icon">
+            <ng-container [ngSwitch]="snackBarType">
+                <i-feather
+                    *ngSwitchCase="'success'"
+                    name="check-circle"></i-feather>
+                <i-feather
+                    *ngSwitchCase="'warn'"
+                    name="alert-triangle"></i-feather>
+                <i-feather
+                    *ngSwitchCase="'error'"
+                    name="alert-octagon"></i-feather>
+                <i-feather
+                    *ngSwitchCase="'info'"
+                    name="alert-circle"></i-feather>
+            </ng-container>
+        </div>
+
+        <div class="title">
+            {{ message }}
+        </div>
+    </div>
+    <button
+        mat-icon-button
+        (click)="onClose()">
+        <i-feather name="x"></i-feather>
+    </button>
+</div>

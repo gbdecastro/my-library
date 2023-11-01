@@ -1,0 +1,33 @@
+@use "./variables" as var;
+
+.roboto {
+    font-family: var.$roboto !important;
+}
+
+.lato {
+    font-family: var.$lato !important;
+}
+
+$sizes: 10 12 13 14 16 18 20 22 24 26 48;
+
+@each $size in $sizes {
+    .lato-#{$size} {
+        font-size: #{$size}px !important;
+        @extend .lato;
+    }
+    .roboto-#{$size} {
+        font-size: #{$size}px !important;
+        @extend .roboto;
+    }
+    .fx-#{$size} {
+        font-size: #{$size}px !important;
+    }
+}
+
+.label {
+    @extend .roboto;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 14px;
+}

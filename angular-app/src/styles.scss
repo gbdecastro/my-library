@@ -1,0 +1,27 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+@import "/node_modules/flag-icons/css/flag-icons.min.css";
+
+.cursor-pointer{
+  cursor: pointer !important;
+}
+
+.library-dialog {
+    width: 560px !important;
+    .modal-content {
+        width: 560px !important;
+    }
+    .mat-mdc-dialog-container .mdc-dialog__surface {
+        box-shadow: none;
+        border-radius: 12px !important;
+    }
+}
+
+.dialog-backdrop {
+    background: rgba(4, 24, 41, 0.45);
+}

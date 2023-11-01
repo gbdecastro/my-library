@@ -1,0 +1,65 @@
+@use "fonts";
+@use "variables" as var;
+
+::ng-deep {
+    &.notification-success {
+        --mdc-snackbar-container-color: none;
+        background-color: var.$success !important;
+        min-height: 62px;
+    }
+    &.notification-warn {
+        --mdc-snackbar-container-color: none;
+        background-color: var.$warn !important;
+        min-height: 62px;
+    }
+    &.notification-error {
+        --mdc-snackbar-container-color: none;
+        background-color: var.$error !important;
+        min-height: 62px;
+    }
+    &.notification-info {
+        --mdc-snackbar-container-color: none;
+        background-color: var.$info !important;
+        min-height: 62px;
+    }
+
+    .mdc-snackbar__surface {
+        min-height: 62px;
+        box-shadow: none !important;
+        border-radius: 4px;
+    }
+}
+
+.notification {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 390px;
+
+    &.notification-success {
+        background-color: var.$success;
+    }
+    &.notification-warn {
+        background-color: var.$warn;
+    }
+    &.notification-error {
+        background-color: var.$error;
+    }
+    &.notification-info {
+        background-color: var.$info;
+    }
+
+    .start {
+        display: inline-flex;
+        gap: 1rem;
+        .icon {
+            display: flex;
+            align-items: center;
+        }
+        .title {
+            @extend .roboto;
+            @extend .fx-16;
+            color: #fff;
+        }
+    }
+}

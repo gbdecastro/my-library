@@ -1,0 +1,33 @@
+@use "variables" as var;
+
+
+.flags {
+    position: absolute;
+    top: 15px;
+    left: 5px;
+    display: flex;
+    gap: 10px;
+
+    span {
+        opacity: .5;
+
+        &.active {
+            opacity: 1;
+        }
+    }
+}
+
+.menu {
+    padding: 0 5rem;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+
+    .active {
+        background-color: #3F51B5FF !important;
+        .tab-name {
+            color: #ffffff !important;
+        }
+    }
+}
