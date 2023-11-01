@@ -14,27 +14,25 @@ services:
     volumes:
       - library_db_volume:/var/lib/mysql
 
-  # Serviço da aplicação Spring Boot
- library-spring-boot-app:
-   build:
-     context: ./spring-boot-app
-     dockerfile: dockerfile
-   container_name: spring_boot_app
-   ports:
-     - "8080:8080"
-   depends_on:
-     - library-mysql
+  library-spring-boot-app:
+    build:
+      context: ./spring-boot-app
+      dockerfile: dockerfile
+    container_name: spring_boot_app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - library-mysql
 
-  # # Serviço do aplicativo Angular
-  # library-angular-app:
-  #   build:
-  #     context: ./angular-app
-  #     dockerfile: Dockerfile
-  #   container_name: angular_app
-  #   ports:
-  #     - "4200:4200"
-  #   depends_on:
-  #     - spring-boot-app
+  library-angular-app:
+    build:
+      context: ./angular-app
+      dockerfile: Dockerfile
+    container_name: angular_app
+    ports:
+      - "4200:4200"
+    depends_on:
+      - library-spring-boot-app
 
 volumes:
   library_db_volume:

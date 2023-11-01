@@ -121,9 +121,7 @@ public class SubjectControllerIT extends BaseIT {
 
     // region given
     protected void givenSubjectRequest(String description) {
-        subjectRequestIT = SubjectRequest.builder()
-                .description(description)
-                .build();
+        subjectRequestIT = SubjectRequest.builder().description(description).build();
     }
     // endregion
 
@@ -138,8 +136,7 @@ public class SubjectControllerIT extends BaseIT {
 
     private void whenRequestCreate(SubjectRequest request) throws Exception {
 
-        MockHttpServletRequestBuilder requestBuilder =
-                post(BASE_URI).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsBytes(request));
+        MockHttpServletRequestBuilder requestBuilder = post(BASE_URI).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsBytes(request));
 
 
         perform = mockMvc.perform(requestBuilder);
@@ -148,7 +145,7 @@ public class SubjectControllerIT extends BaseIT {
     private void whenRequestUpdate(Long id, SubjectRequest request) throws Exception {
 
         MockHttpServletRequestBuilder requestBuilder =
-                put(BASE_URI_ID, id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsBytes(request));
+            put(BASE_URI_ID, id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsBytes(request));
 
 
         perform = mockMvc.perform(requestBuilder);
@@ -162,26 +159,23 @@ public class SubjectControllerIT extends BaseIT {
     // region then
     private void thenShouldReturnAll() throws Exception {
         perform.andExpect(status().isOk()).andExpect(jsonPath("$._embedded.subjectResponseList").isArray())
-                .andExpect(jsonPath("$._embedded.subjectResponseList[0].id").value(subjectIT.getId()))
-                .andExpect(jsonPath("$._embedded.subjectResponseList[0].description").value(subjectIT.getDescription()));
+            .andExpect(jsonPath("$._embedded.subjectResponseList[0].id").value(subjectIT.getId()))
+            .andExpect(jsonPath("$._embedded.subjectResponseList[0].description").value(subjectIT.getDescription()));
     }
 
     private void thenShouldReturnASubject() throws Exception {
-        perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(subjectIT.getId()))
-                .andExpect(jsonPath("$.description").value(subjectIT.getDescription()));
+        perform.andExpect(status().isOk()).andExpect(jsonPath("$.id").value(subjectIT.getId()))
+            .andExpect(jsonPath("$.description").value(subjectIT.getDescription()));
     }
 
     private void thenShouldReturnACreatedSubject() throws Exception {
-        perform.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").isNotEmpty())
-                .andExpect(jsonPath("$.description").value(subjectRequestIT.getDescription()));
+        perform.andExpect(status().isCreated()).andExpect(jsonPath("$.id").isNotEmpty())
+            .andExpect(jsonPath("$.description").value(subjectRequestIT.getDescription()));
     }
 
-    private void thenShouldReturnUpdatedSubject() throws Exception{
-        perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").isNotEmpty())
-                .andExpect(jsonPath("$.description").value(subjectRequestIT.getDescription()));
+    private void thenShouldReturnUpdatedSubject() throws Exception {
+        perform.andExpect(status().isOk()).andExpect(jsonPath("$.id").isNotEmpty())
+            .andExpect(jsonPath("$.description").value(subjectRequestIT.getDescription()));
     }
 
     // endregion

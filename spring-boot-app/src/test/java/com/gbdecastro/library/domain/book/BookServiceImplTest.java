@@ -92,7 +92,7 @@ public class BookServiceImplTest extends BaseDomainTest {
     @Test
     @DisplayName("Creating a book with valid data should succeed")
     void create_shouldSucceedWithValidData() {
-        givenAuthor(AUTHOR_ID,AUTHOR_NAME);
+        givenAuthor(AUTHOR_ID, AUTHOR_NAME);
         givenSubject(SUBJECT_ID, SUBJECT_DESCRIPTION);
         givenBookRequest(BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR, Set.of(authorTest.getId()), Set.of(subjectTest.getId()));
         givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR);
@@ -126,7 +126,7 @@ public class BookServiceImplTest extends BaseDomainTest {
     @Test
     @DisplayName("Updating a book with valid data should succeed")
     void update_shouldSucceedWithValidData() {
-        givenAuthor(AUTHOR_ID,AUTHOR_NAME);
+        givenAuthor(AUTHOR_ID, AUTHOR_NAME);
         givenSubject(SUBJECT_ID, SUBJECT_DESCRIPTION);
         givenBookRequest(BOOK_TITLE_OTHER, BOOK_EDITION, BOOK_PUB_YEAR, Set.of(authorTest.getId()), Set.of(subjectTest.getId()));
         givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR);
@@ -179,14 +179,15 @@ public class BookServiceImplTest extends BaseDomainTest {
         bookResult = service.findById(id);
     }
 
-    private void whenCalled_create(BookRequest bookRequest){
+    private void whenCalled_create(BookRequest bookRequest) {
         bookResult = service.create(bookRequest);
     }
-    private void whenCalled_update(Long id, BookRequest bookRequest){
+
+    private void whenCalled_update(Long id, BookRequest bookRequest) {
         bookResult = service.update(id, bookRequest);
     }
 
-    private void whenCalled_delete(Long id){
+    private void whenCalled_delete(Long id) {
         service.delete(id);
     }
 
@@ -195,16 +196,11 @@ public class BookServiceImplTest extends BaseDomainTest {
     // region then(s)
 
     private void thenShouldReturnABookList() {
-        assertAll(
-                () -> verify(repository, times(1)).findAll(),
-                () -> assertEquals(bookTest, bookListResult.get(0))
-        );
+        assertAll(() -> verify(repository, times(1)).findAll(), () -> assertEquals(bookTest, bookListResult.get(0)));
     }
 
     private void thenShouldReturnABook(Long id) {
-        assertAll(
-                () -> verify(repository, times(1)).findById(id),
-                () -> assertEquals(bookTest, bookResult));
+        assertAll(() -> verify(repository, times(1)).findById(id), () -> assertEquals(bookTest, bookResult));
     }
 
     // endregion

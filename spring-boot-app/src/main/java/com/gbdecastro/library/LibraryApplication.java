@@ -19,6 +19,7 @@ public class LibraryApplication implements WebMvcConfigurer {
     public LibraryApplication(LocaleChangeInterceptor localeChangeInterceptor) {
         this.localeChangeInterceptor = localeChangeInterceptor;
     }
+
     public static void main(String[] args) {
 
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();

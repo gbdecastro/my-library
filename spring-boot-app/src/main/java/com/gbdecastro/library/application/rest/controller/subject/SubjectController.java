@@ -87,8 +87,7 @@ public class SubjectController implements SubjectApi {
     @Override
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<SubjectResponse>> update(Long id, @Valid @RequestBody SubjectRequest subjectRequest) {
-        SubjectResponse response =
-                mapper.toResponse(service.update(id, mapper.requestToSubject(subjectRequest)));
+        SubjectResponse response = mapper.toResponse(service.update(id, mapper.requestToSubject(subjectRequest)));
 
         Link selfLink = linkTo(methodOn(getClass()).update(id, subjectRequest)).withSelfRel();
         Link findOne = SubjectLinks.findOne(id);

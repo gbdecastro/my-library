@@ -66,7 +66,7 @@ public class SubjectServiceImpl implements SubjectService {
     public void delete(Long id) {
         Subject subject = findById(id);
 
-        if(!subject.getBooks().isEmpty()){
+        if (!subject.getBooks().isEmpty()) {
             throw new DomainException(HttpStatus.BAD_REQUEST.value(), messageContext.getMessage("subject_already_linked_a_book"));
         }
 

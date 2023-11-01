@@ -71,34 +71,25 @@ public class BaseIT {
     // endregion
 
 
-    protected void givenAuthor(){
-        authorIT = Author.builder()
-                .name(AUTHOR_NAME)
-                .build();
+    protected void givenAuthor() {
+        authorIT = Author.builder().name(AUTHOR_NAME).build();
         authorIT = authorRepository.save(authorIT);
     }
 
-    protected void givenBook(){
-        bookIT = Book.builder()
-                .title(BOOK_TITLE)
-                .edition(BOOK_EDITION)
-                .publicationYear(BOOK_PUB_YEAR)
-                .build();
+    protected void givenBook() {
+        bookIT = Book.builder().title(BOOK_TITLE).edition(BOOK_EDITION).publicationYear(BOOK_PUB_YEAR).build();
 
         bookIT = bookRepository.save(bookIT);
     }
 
-    protected void givenSubject(){
-        subjectIT = Subject.builder()
-                .description(SUBJECT_DESCRIPTION)
-                .build();
+    protected void givenSubject() {
+        subjectIT = Subject.builder().description(SUBJECT_DESCRIPTION).build();
         subjectIT = subjectRepository.save(subjectIT);
     }
 
     // region then
     protected void thenShouldReturnDomainException(int code, String msg) throws Exception {
-        perform.andExpect(status().is(code))
-                .andExpect(jsonPath("$.message").value(msg));
+        perform.andExpect(status().is(code)).andExpect(jsonPath("$.message").value(msg));
     }
 
     protected void thenShouldReturnEntityNotFound(String msg) throws Exception {

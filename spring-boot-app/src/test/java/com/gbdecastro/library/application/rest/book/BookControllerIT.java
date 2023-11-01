@@ -71,7 +71,7 @@ public class BookControllerIT extends BaseIT {
     void create_shouldReturnTheCreatedBook() throws Exception {
         givenAuthor();
         givenSubject();
-        givenBookRequest(BOOK_TITLE,BOOK_EDITION,BOOK_PUB_YEAR,authorIT,subjectIT);
+        givenBookRequest(BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR, authorIT, subjectIT);
         whenRequestCreate(bookRequestIT);
         thenShouldReturnACreatedBook();
     }
@@ -81,7 +81,7 @@ public class BookControllerIT extends BaseIT {
     void create_shouldReturnDomainException_bookTitleIsRequired(String title) throws Exception {
         givenAuthor();
         givenSubject();
-        givenBookRequest(title,BOOK_EDITION,BOOK_PUB_YEAR,authorIT,subjectIT);
+        givenBookRequest(title, BOOK_EDITION, BOOK_PUB_YEAR, authorIT, subjectIT);
         whenRequestCreate(bookRequestIT);
         thenShouldReturnDomainException(HttpStatus.BAD_REQUEST.value(), messageContext.getMessage("title_required"));
     }
@@ -92,7 +92,7 @@ public class BookControllerIT extends BaseIT {
         givenBook();
         givenAuthor();
         givenSubject();
-        givenBookRequest(BOOK_TITLE_OTHER,BOOK_EDITION,BOOK_PUB_YEAR,authorIT,subjectIT);
+        givenBookRequest(BOOK_TITLE_OTHER, BOOK_EDITION, BOOK_PUB_YEAR, authorIT, subjectIT);
         whenRequestUpdate(bookIT.getId(), bookRequestIT);
         thenShouldReturnUpdatedBook();
     }
@@ -110,7 +110,7 @@ public class BookControllerIT extends BaseIT {
         givenBook();
         givenAuthor();
         givenSubject();
-        givenBookRequest(title,BOOK_EDITION,BOOK_PUB_YEAR,authorIT,subjectIT);
+        givenBookRequest(title, BOOK_EDITION, BOOK_PUB_YEAR, authorIT, subjectIT);
         whenRequestUpdate(bookIT.getId(), bookRequestIT);
         thenShouldReturnDomainException(HttpStatus.BAD_REQUEST.value(), messageContext.getMessage("title_required"));
     }
@@ -134,13 +134,8 @@ public class BookControllerIT extends BaseIT {
 
     // region given
     protected void givenBookRequest(String title, Integer edition, String publicationYear, Author author, Subject subject) {
-        bookRequestIT = BookRequest.builder()
-                .title(title)
-                .edition(edition)
-                .publicationYear(publicationYear)
-                .subjects(Set.of(subject.getId()))
-                .authors(Set.of(author.getId()))
-                .build();
+        bookRequestIT = BookRequest.builder().title(title).edition(edition).publicationYear(publicationYear).subjects(Set.of(subject.getId()))
+            .authors(Set.of(author.getId())).build();
     }
     // endregion
 
@@ -155,8 +150,7 @@ public class BookControllerIT extends BaseIT {
 
     private void whenRequestCreate(BookRequest request) throws Exception {
 
-        MockHttpServletRequestBuilder requestBuilder =
-                post(BASE_URI).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsBytes(request));
+        MockHttpServletRequestBuilder requestBuilder = post(BASE_URI).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsBytes(request));
 
 
         perform = mockMvc.perform(requestBuilder);
@@ -165,7 +159,7 @@ public class BookControllerIT extends BaseIT {
     private void whenRequestUpdate(Long id, BookRequest request) throws Exception {
 
         MockHttpServletRequestBuilder requestBuilder =
-                put(BASE_URI_ID, id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsBytes(request));
+            put(BASE_URI_ID, id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsBytes(request));
 
 
         perform = mockMvc.perform(requestBuilder);
@@ -179,34 +173,26 @@ public class BookControllerIT extends BaseIT {
     // region then
     private void thenShouldReturnAll() throws Exception {
         perform.andExpect(status().isOk()).andExpect(jsonPath("$._embedded.bookResponseList").isArray())
-                .andExpect(jsonPath("$._embedded.bookResponseList[0].id").value(bookIT.getId()))
-                .andExpect(jsonPath("$._embedded.bookResponseList[0].title").value(bookIT.getTitle()))
-                .andExpect(jsonPath("$._embedded.bookResponseList[0].publicationYear").value(bookIT.getPublicationYear()))
-                .andExpect(jsonPath("$._embedded.bookResponseList[0].edition").value(bookIT.getEdition()));
+            .andExpect(jsonPath("$._embedded.bookResponseList[0].id").value(bookIT.getId()))
+            .andExpect(jsonPath("$._embedded.bookResponseList[0].title").value(bookIT.getTitle()))
+            .andExpect(jsonPath("$._embedded.bookResponseList[0].publicationYear").value(bookIT.getPublicationYear()))
+            .andExpect(jsonPath("$._embedded.bookResponseList[0].edition").value(bookIT.getEdition()));
     }
 
     private void thenShouldReturnABook() throws Exception {
-        perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(bookIT.getId()))
-                .andExpect(jsonPath("$.title").value(bookIT.getTitle()))
-                .andExpect(jsonPath("$.edition").value(bookIT.getEdition()))
-                .andExpect(jsonPath("$.publicationYear").value(bookIT.getPublicationYear()));
+        perform.andExpect(status().isOk()).andExpect(jsonPath("$.id").value(bookIT.getId())).andExpect(jsonPath("$.title").value(bookIT.getTitle()))
+            .andExpect(jsonPath("$.edition").value(bookIT.getEdition())).andExpect(jsonPath("$.publicationYear").value(bookIT.getPublicationYear()));
     }
 
     private void thenShouldReturnACreatedBook() throws Exception {
-        perform.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").isNotEmpty())
-                .andExpect(jsonPath("$.title").value(bookRequestIT.getTitle()))
-                .andExpect(jsonPath("$.edition").value(bookRequestIT.getEdition()))
-                .andExpect(jsonPath("$.publicationYear").value(bookRequestIT.getPublicationYear()));
+        perform.andExpect(status().isCreated()).andExpect(jsonPath("$.id").isNotEmpty()).andExpect(jsonPath("$.title").value(bookRequestIT.getTitle()))
+            .andExpect(jsonPath("$.edition").value(bookRequestIT.getEdition()))
+            .andExpect(jsonPath("$.publicationYear").value(bookRequestIT.getPublicationYear()));
     }
 
-    private void thenShouldReturnUpdatedBook() throws Exception{
-        perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").isNotEmpty())
-                .andExpect(jsonPath("$.title").value(bookIT.getTitle()))
-                .andExpect(jsonPath("$.edition").value(bookIT.getEdition()))
-                .andExpect(jsonPath("$.publicationYear").value(bookIT.getPublicationYear()));
+    private void thenShouldReturnUpdatedBook() throws Exception {
+        perform.andExpect(status().isOk()).andExpect(jsonPath("$.id").isNotEmpty()).andExpect(jsonPath("$.title").value(bookIT.getTitle()))
+            .andExpect(jsonPath("$.edition").value(bookIT.getEdition())).andExpect(jsonPath("$.publicationYear").value(bookIT.getPublicationYear()));
     }
 
     // endregion

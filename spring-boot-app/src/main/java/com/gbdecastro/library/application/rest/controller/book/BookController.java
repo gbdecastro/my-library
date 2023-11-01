@@ -83,7 +83,7 @@ public class BookController implements BookApi {
     @Override
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<BookResponse>> update(Long id, BookRequest bookRequest) {
-        BookResponse response =  mapper.toResponse(service.update(id, bookRequest));
+        BookResponse response = mapper.toResponse(service.update(id, bookRequest));
 
         Link selfLink = linkTo(methodOn(getClass()).update(id, bookRequest)).withSelfRel();
         Link findOne = BookLinks.findOne(id);

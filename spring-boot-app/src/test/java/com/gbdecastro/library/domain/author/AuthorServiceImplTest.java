@@ -103,7 +103,7 @@ public class AuthorServiceImplTest extends BaseDomainTest {
 
         // Then
 
-        thenThrowDomainException(()-> service.delete(authorTest.getId()), HttpStatus.BAD_REQUEST.value(), "author_already_linked_a_book");
+        thenThrowDomainException(() -> service.delete(authorTest.getId()), HttpStatus.BAD_REQUEST.value(), "author_already_linked_a_book");
         verify(repository, never()).delete(any());
     }
 
@@ -157,7 +157,7 @@ public class AuthorServiceImplTest extends BaseDomainTest {
         whenCalling_messageContext("name_required");
 
         // Then
-        thenThrowDomainException(()-> service.create(authorTest), HttpStatus.BAD_REQUEST.value(), "name_required");
+        thenThrowDomainException(() -> service.create(authorTest), HttpStatus.BAD_REQUEST.value(), "name_required");
 
         // Verify
         verify(repository, never()).save(any());
@@ -172,7 +172,7 @@ public class AuthorServiceImplTest extends BaseDomainTest {
         whenCalling_messageContext("name_max_length");
 
         // Then
-        thenThrowDomainException(()-> service.create(authorTest), HttpStatus.BAD_REQUEST.value(), "name_max_length");
+        thenThrowDomainException(() -> service.create(authorTest), HttpStatus.BAD_REQUEST.value(), "name_max_length");
 
         // Verify
         verify(repository, never()).save(any());
@@ -252,6 +252,7 @@ public class AuthorServiceImplTest extends BaseDomainTest {
     private void whenCalled_create(Author author) {
         authorResult = service.create(author);
     }
+
     private void whenCalled_update(Long id, Author author) {
         authorResult = service.update(id, author);
     }
@@ -260,23 +261,15 @@ public class AuthorServiceImplTest extends BaseDomainTest {
 
     // region Then
     private void thenShouldReturnAnAuthorList() {
-        assertAll(
-                () -> verify(repository, times(1)).findAll(),
-                () -> assertEquals(authorListTest, authorListResult)
-        );
+        assertAll(() -> verify(repository, times(1)).findAll(), () -> assertEquals(authorListTest, authorListResult));
     }
 
     private void thenShouldReturnAnAuthorListByIds(Set<Long> ids) {
-        assertAll(
-                () -> verify(repository, times(1)).findAllById(ids),
-                () -> assertEquals(authorListTest, authorListResult)
-        );
+        assertAll(() -> verify(repository, times(1)).findAllById(ids), () -> assertEquals(authorListTest, authorListResult));
     }
 
     private void thenShouldReturnAnAuthor(Long id) {
-        assertAll(
-                () -> verify(repository, times(1)).findById(id),
-                () -> assertEquals(authorTest, authorResult));
+        assertAll(() -> verify(repository, times(1)).findById(id), () -> assertEquals(authorTest, authorResult));
     }
     // endregion
 

@@ -53,11 +53,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book create(BookRequest bookRequest) {
 
-        Book book = Book.builder()
-                .edition(bookRequest.getEdition())
-                .publicationYear(bookRequest.getPublicationYear())
-                .title(bookRequest.getTitle())
-                .build();
+        Book book = Book.builder().edition(bookRequest.getEdition()).publicationYear(bookRequest.getPublicationYear()).title(bookRequest.getTitle()).build();
 
         this.validate(book);
 

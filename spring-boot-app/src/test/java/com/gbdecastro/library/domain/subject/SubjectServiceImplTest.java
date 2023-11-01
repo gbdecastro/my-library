@@ -103,7 +103,7 @@ public class SubjectServiceImplTest extends BaseDomainTest {
         whenCalling_messageContext("subject_already_linked_a_book");
 
         // Then
-        thenThrowDomainException(()-> service.delete(subjectTest.getId()), HttpStatus.BAD_REQUEST.value(), "subject_already_linked_a_book");
+        thenThrowDomainException(() -> service.delete(subjectTest.getId()), HttpStatus.BAD_REQUEST.value(), "subject_already_linked_a_book");
         verify(repository, never()).delete(any());
     }
 
@@ -157,7 +157,7 @@ public class SubjectServiceImplTest extends BaseDomainTest {
         whenCalling_messageContext("description_required");
 
         // Then
-        thenThrowDomainException(()-> service.create(subjectTest), HttpStatus.BAD_REQUEST.value(), "description_required");
+        thenThrowDomainException(() -> service.create(subjectTest), HttpStatus.BAD_REQUEST.value(), "description_required");
 
         // Verify
         verify(repository, never()).save(any());
@@ -172,7 +172,7 @@ public class SubjectServiceImplTest extends BaseDomainTest {
         whenCalling_messageContext("description_max_length");
 
         // Then
-        thenThrowDomainException(()-> service.create(subjectTest), HttpStatus.BAD_REQUEST.value(), "description_max_length");
+        thenThrowDomainException(() -> service.create(subjectTest), HttpStatus.BAD_REQUEST.value(), "description_max_length");
 
         // Verify
         verify(repository, never()).save(any());
@@ -252,6 +252,7 @@ public class SubjectServiceImplTest extends BaseDomainTest {
     private void whenCalled_create(Subject subject) {
         subjectResult = service.create(subject);
     }
+
     private void whenCalled_update(Long id, Subject subject) {
         subjectResult = service.update(id, subject);
     }
@@ -260,23 +261,15 @@ public class SubjectServiceImplTest extends BaseDomainTest {
 
     // region Then
     private void thenShouldReturnAnSubjectList() {
-        assertAll(
-                () -> verify(repository, times(1)).findAll(),
-                () -> assertEquals(subjectListTest, subjectListResult)
-        );
+        assertAll(() -> verify(repository, times(1)).findAll(), () -> assertEquals(subjectListTest, subjectListResult));
     }
 
     private void thenShouldReturnAnSubjectListByIds(Set<Long> ids) {
-        assertAll(
-                () -> verify(repository, times(1)).findAllById(ids),
-                () -> assertEquals(subjectListTest, subjectListResult)
-        );
+        assertAll(() -> verify(repository, times(1)).findAllById(ids), () -> assertEquals(subjectListTest, subjectListResult));
     }
 
     private void thenShouldReturnAnSubject(Long id) {
-        assertAll(
-                () -> verify(repository, times(1)).findById(id),
-                () -> assertEquals(subjectTest, subjectResult));
+        assertAll(() -> verify(repository, times(1)).findById(id), () -> assertEquals(subjectTest, subjectResult));
     }
     // endregion
 

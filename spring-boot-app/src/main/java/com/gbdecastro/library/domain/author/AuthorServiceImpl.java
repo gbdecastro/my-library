@@ -69,8 +69,8 @@ public class AuthorServiceImpl implements AuthorService {
     public void delete(Long id) {
         Author author = findById(id);
 
-        if(!author.getBooks().isEmpty()){
-            throw new DomainException(HttpStatus.BAD_REQUEST.value(),messageContext.getMessage("author_already_linked_a_book"));
+        if (!author.getBooks().isEmpty()) {
+            throw new DomainException(HttpStatus.BAD_REQUEST.value(), messageContext.getMessage("author_already_linked_a_book"));
         }
 
         repository.delete(author);

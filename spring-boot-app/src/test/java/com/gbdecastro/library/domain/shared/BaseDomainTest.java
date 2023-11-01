@@ -16,7 +16,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
-@TestPropertySource(locations="classpath:application-test.yml")
+@TestPropertySource(locations = "classpath:application-test.yml")
 public class BaseDomainTest {
     // region Data
     protected final String AUTHOR_NOT_FOUND = "author_not_found";
@@ -39,35 +39,31 @@ public class BaseDomainTest {
     protected void givenAuthor(Long id, String name) {
         authorTest = Author.builder().id(id).name(name).build();
     }
+
     protected void givenAuthor2(Long id, String name) {
         authorTest2 = Author.builder().id(id).name(name).build();
     }
+
     protected void givenSubject(Long id, String description) {
         subjectTest = Subject.builder().id(id).description(description).build();
     }
+
     protected void givenSubject2(Long id, String description) {
         subjectTest2 = Subject.builder().id(id).description(description).build();
     }
+
     protected void givenBook(Long id, String title, Integer edition, String publicationYear) {
-        bookTest = Book.builder()
-                .id(id)
-                .title(title)
-                .edition(edition)
-                .publicationYear(publicationYear)
-                .build();
+        bookTest = Book.builder().id(id).title(title).edition(edition).publicationYear(publicationYear).build();
     }
+
     protected void givenBookRequest(String title, Integer edition, String publicationYear, Set<Long> authors, Set<Long> subjects) {
-        bookRequestTest = BookRequest.builder()
-                .title(title)
-                .edition(edition)
-                .publicationYear(publicationYear)
-                .authors(authors)
-                .subjects(subjects)
-                .build();
+        bookRequestTest = BookRequest.builder().title(title).edition(edition).publicationYear(publicationYear).authors(authors).subjects(subjects).build();
     }
+
     protected void givenAnAuthorToBook(Book book, Author author) {
         author.addBook(book);
     }
+
     protected void givenASubjectToBook(Book book, Subject subject) {
         subject.addBook(book);
     }

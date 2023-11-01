@@ -17,10 +17,7 @@ public class LocaleConfig {
         AcceptHeaderLocaleResolver resolver = new AcceptHeaderLocaleResolver();
 
         resolver.setDefaultLocale(Locale.ENGLISH);
-        resolver.setSupportedLocales(List.of(
-                Locale.ENGLISH,
-                new Locale("pt")
-        ));
+        resolver.setSupportedLocales(List.of(Locale.ENGLISH, new Locale("pt")));
 
         return resolver;
     }

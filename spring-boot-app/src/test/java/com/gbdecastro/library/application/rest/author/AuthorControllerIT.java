@@ -122,9 +122,7 @@ public class AuthorControllerIT extends BaseIT {
 
     // region given
     protected void givenAuthorRequest(String name) {
-        authorRequestIT = AuthorRequest.builder()
-                .name(name)
-                .build();
+        authorRequestIT = AuthorRequest.builder().name(name).build();
     }
     // endregion
 
@@ -139,8 +137,7 @@ public class AuthorControllerIT extends BaseIT {
 
     private void whenRequestCreate(AuthorRequest request) throws Exception {
 
-        MockHttpServletRequestBuilder requestBuilder =
-                post(BASE_URI).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsBytes(request));
+        MockHttpServletRequestBuilder requestBuilder = post(BASE_URI).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsBytes(request));
 
 
         perform = mockMvc.perform(requestBuilder);
@@ -149,7 +146,7 @@ public class AuthorControllerIT extends BaseIT {
     private void whenRequestUpdate(Long id, AuthorRequest request) throws Exception {
 
         MockHttpServletRequestBuilder requestBuilder =
-                put(BASE_URI_ID, id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsBytes(request));
+            put(BASE_URI_ID, id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsBytes(request));
 
 
         perform = mockMvc.perform(requestBuilder);
@@ -163,26 +160,20 @@ public class AuthorControllerIT extends BaseIT {
     // region then
     private void thenShouldReturnAll() throws Exception {
         perform.andExpect(status().isOk()).andExpect(jsonPath("$._embedded.authorResponseList").isArray())
-                .andExpect(jsonPath("$._embedded.authorResponseList[0].id").value(authorIT.getId()))
-                .andExpect(jsonPath("$._embedded.authorResponseList[0].name").value(authorIT.getName()));
+            .andExpect(jsonPath("$._embedded.authorResponseList[0].id").value(authorIT.getId()))
+            .andExpect(jsonPath("$._embedded.authorResponseList[0].name").value(authorIT.getName()));
     }
 
     private void thenShouldReturnAAuthor() throws Exception {
-        perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(authorIT.getId()))
-                .andExpect(jsonPath("$.name").value(authorIT.getName()));
+        perform.andExpect(status().isOk()).andExpect(jsonPath("$.id").value(authorIT.getId())).andExpect(jsonPath("$.name").value(authorIT.getName()));
     }
 
     private void thenShouldReturnACreatedAuthor() throws Exception {
-        perform.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").isNotEmpty())
-                .andExpect(jsonPath("$.name").value(authorRequestIT.getName()));
+        perform.andExpect(status().isCreated()).andExpect(jsonPath("$.id").isNotEmpty()).andExpect(jsonPath("$.name").value(authorRequestIT.getName()));
     }
 
-    private void thenShouldReturnUpdatedAuthor() throws Exception{
-        perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").isNotEmpty())
-                .andExpect(jsonPath("$.name").value(authorRequestIT.getName()));
+    private void thenShouldReturnUpdatedAuthor() throws Exception {
+        perform.andExpect(status().isOk()).andExpect(jsonPath("$.id").isNotEmpty()).andExpect(jsonPath("$.name").value(authorRequestIT.getName()));
     }
 
     // endregion

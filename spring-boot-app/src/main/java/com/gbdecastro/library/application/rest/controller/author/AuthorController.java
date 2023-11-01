@@ -85,8 +85,7 @@ public class AuthorController implements AuthorApi {
     @Override
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<AuthorResponse>> update(Long id, @Valid @RequestBody AuthorRequest authorRequest) {
-        AuthorResponse response =
-                mapper.toResponse(service.update(id, mapper.requestToAuthor(authorRequest)));
+        AuthorResponse response = mapper.toResponse(service.update(id, mapper.requestToAuthor(authorRequest)));
 
         Link selfLink = linkTo(methodOn(getClass()).update(id, authorRequest)).withSelfRel();
         Link findOne = AuthorLinks.findOne(id);

@@ -16,15 +16,8 @@ public class OpenApiConfig {
     public OperationCustomizer customize() {
         return (operation, handlerMethod) -> {
 
-            Parameter acceptLanguage = new HeaderParameter()
-                    .in("header")
-                    .required(true)
-                    .description("The desired language for the response.")
-                    .name("Accept-Language")
-                    .schema(new StringSchema()
-                            .addEnumItem(Locale.ENGLISH.getLanguage())
-                            .addEnumItem(new Locale("pt").getLanguage())
-                    );
+            Parameter acceptLanguage = new HeaderParameter().in("header").required(true).description("The desired language for the response.")
+                .name("Accept-Language").schema(new StringSchema().addEnumItem(Locale.ENGLISH.getLanguage()).addEnumItem(new Locale("pt").getLanguage()));
             operation.addParametersItem(acceptLanguage);
             return operation;
         };

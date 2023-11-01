@@ -15,6 +15,7 @@ import static com.gbdecastro.library.domain.subject.SubjectConstant.SUBJECT_DESC
 import static com.gbdecastro.library.domain.subject.SubjectConstant.SUBJECT_ID;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class SubjectTest extends BaseDomainTest {
 
 
