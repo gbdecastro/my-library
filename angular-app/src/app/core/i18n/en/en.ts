@@ -17,6 +17,14 @@ export const I18N_EN = {
         UPDATE_MESSAGE: "Author updated successfuly!",
         DELETE_MESSAGE: "Author removed successfuly!",
     },
+    SUBJECTS: {
+        DESCRIPTION: "Description",
+        ADD: "Add Subject",
+        MANAGEMENT: "Management Subject",
+        CREATE_MESSAGE: "Subject created successfuly!",
+        UPDATE_MESSAGE: "Subject updated successfuly!",
+        DELETE_MESSAGE: "Subject removed successfuly!",
+    },
     COMMON: {
         NOT_FOUND: "Page not found",
         ACTION: "Action",

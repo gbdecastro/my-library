@@ -24,6 +24,7 @@ export class AuthorsComponent implements OnInit, OnDestroy {
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
     formFilter: FormGroup;
+    loading = false;
     private readonly unsubscribe$: Subject<void> = new Subject();
 
     constructor(
@@ -49,6 +50,7 @@ export class AuthorsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.loading = true;
         this.service
             .getAll()
             .pipe(takeUntil(this.unsubscribe$))
@@ -58,6 +60,7 @@ export class AuthorsComponent implements OnInit, OnDestroy {
                 );
                 this.authorsData.paginator = this.paginator;
                 this.authorsData.sort = this.sort;
+                this.loading = false;
             });
     }
 
@@ -100,6 +103,7 @@ export class AuthorsComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((confirm) => {
                 if (confirm) {
+                    this.loading = true;
                     this.service
                         .delete(row.id)
                         .pipe(takeUntil(this.unsubscribe$))
@@ -111,12 +115,14 @@ export class AuthorsComponent implements OnInit, OnDestroy {
                                 message: this.i18n.instant("AUTHORS.DELETE_MESSAGE"),
                                 type: "success",
                             });
+                            this.loading = false;
                         });
                 }
             });
     }
 
     private create(author: IAuthorRequest): void {
+        this.loading = true;
         this.service
             .create(author)
             .pipe(takeUntil(this.unsubscribe$))
@@ -128,10 +134,12 @@ export class AuthorsComponent implements OnInit, OnDestroy {
                     message: this.i18n.instant("AUTHORS.CREATE_MESSAGE"),
                     type: "success",
                 });
+                this.loading = false;
             });
     }
 
     private update(id: number, author: IAuthorRequest): void {
+        this.loading = true;
         this.service
             .update(id, author)
             .pipe(takeUntil(this.unsubscribe$))
@@ -144,6 +152,8 @@ export class AuthorsComponent implements OnInit, OnDestroy {
                     message: this.i18n.instant("AUTHORS.UPDATE_MESSAGE"),
                     type: "success",
                 });
+
+                this.loading = false;
             });
     }
 }

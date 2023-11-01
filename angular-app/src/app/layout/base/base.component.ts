@@ -1,5 +1,7 @@
 import { Component } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
+import { LANG_PT_BR } from "@app/core/i18n/pt-br/pt-br";
+import { LANG_EN } from "@app/core/i18n/en/en";
 
 @Component({
     selector: "app-base",
@@ -14,6 +16,9 @@ export class BaseComponent {
     ];
 
     currentLang: string;
+
+    readonly pt = LANG_PT_BR;
+    readonly en = LANG_EN;
 
     constructor(private readonly i18n: TranslateService) {
         this.currentLang = this.i18n.defaultLang;

@@ -1,5 +1,5 @@
 <div mat-dialog-title>
-    {{ "AUTHORS.MANAGEMENT" | translate }}
+    {{ "SUBJECTS.MANAGEMENT" | translate }}
 </div>
 <div
     [formGroup]="form"
@@ -7,26 +7,26 @@
     mat-dialog-content>
     <mat-form-field class="w-100">
         <mat-label>
-            {{ "AUTHORS.NAME" | translate }}
+            {{ "SUBJECTS.DESCRIPTION" | translate }}
         </mat-label>
         <input
-            formControlName="name"
+            formControlName="description"
             matInput
             required />
         <button
-            (click)="name.setValue('')"
-            *ngIf="name.value"
+            (click)="description.setValue('')"
+            *ngIf="description.value"
             aria-label="Clear"
-            class="clear-name"
-            data-cy="name-clear"
+            class="clear-description"
+            data-cy="description-clear"
             mat-icon-button
             matSuffix>
             <feather-icon name="x"></feather-icon>
         </button>
-        <mat-error *ngIf="name.hasError('required')">
+        <mat-error *ngIf="description.hasError('required')">
             {{ "COMMON.REQUIRED_FIELD" | translate }}
         </mat-error>
-        <mat-error *ngIf="name.hasError('maxlength')">
+        <mat-error *ngIf="description.hasError('maxlength')">
             {{ "COMMON.MAX_LENGTH_ERROR" | translate: { max: 40 } }}
         </mat-error>
     </mat-form-field>

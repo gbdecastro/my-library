@@ -1,12 +1,12 @@
 <div class="flags">
     <span
-        (click)="onLocale('en')"
-        [ngClass]="{ active: currentLang === 'en' }"
+        (click)="onLocale(en)"
+        [ngClass]="{ active: currentLang === en }"
         [ngbTooltip]="'TRANSLATE.EN' | translate"
         class="cursor-pointer fi fi-um"></span>
     <span
-        (click)="onLocale('pt-br')"
-        [ngClass]="{ active: currentLang === 'pt-br' }"
+        (click)="onLocale(pt)"
+        [ngClass]="{ active: currentLang === pt }"
         [ngbTooltip]="'TRANSLATE.PT' | translate"
         class="cursor-pointer fi fi-br"></span>
 </div>

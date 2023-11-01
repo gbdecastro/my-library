@@ -16,6 +16,7 @@ import { FeatherModule } from "angular-feather";
 import { UpsertComponent } from "./upsert/upsert.component";
 import { MatDialogModule } from "@angular/material/dialog";
 import { ConfirmationDialogModule } from "@layout/confirmation-dialog/confirmation-dialog.module";
+import { LoaderModule } from "@layout/loader/loader.module";
 
 @NgModule({
     declarations: [AuthorsComponent, UpsertComponent],
@@ -34,6 +35,7 @@ import { ConfirmationDialogModule } from "@layout/confirmation-dialog/confirmati
         FeatherModule,
         MatDialogModule,
         ConfirmationDialogModule,
+        LoaderModule,
     ],
 })
 export class AuthorsModule {}

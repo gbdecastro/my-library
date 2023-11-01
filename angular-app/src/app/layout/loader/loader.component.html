@@ -1,0 +1,12 @@
+<div class="spinner-progress-wait">
+    <mat-progress-spinner
+        [diameter]="diameter"
+        mode="indeterminate"
+        strokeWidth="4">
+    </mat-progress-spinner>
+    <feather-icon
+        *ngIf="showIcon"
+        [style.height.px]="imgSize"
+        [style.width.px]="imgSize"
+        name="book-open"></feather-icon>
+</div>

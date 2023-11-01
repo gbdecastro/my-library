@@ -1,112 +1,116 @@
-<div class="my-4 d-flex flex-wrap justify-content-between">
-    <ng-container [formGroup]="formFilter">
-        <mat-form-field>
-            <mat-label>
-                {{ "COMMON.FILTER" | translate }}
-            </mat-label>
-            <input
-                formControlName="search"
-                matInput />
-            <button
-                (click)="search.setValue('')"
-                *ngIf="search.value"
-                aria-label="Clear"
-                class="clear-filter"
-                data-cy="search-clear"
-                mat-icon-button
-                matSuffix>
-                <feather-icon name="x"></feather-icon>
-            </button>
-        </mat-form-field>
-    </ng-container>
-    <button
-        (click)="openManagementDialog()"
-        color="primary"
-        mat-raised-button>
-        {{ "AUTHORS.ADD" | translate }}
-    </button>
-</div>
-<div class="table-responsive">
-    <table
-        [dataSource]="authorsData"
-        mat-table
-        matSort>
-        <!-- ID Column -->
-        <ng-container matColumnDef="id">
-            <th
-                *matHeaderCellDef
-                mat-header-cell
-                mat-sort-header>
-                #
-            </th>
-            <td
-                *matCellDef="let row"
-                mat-cell>
-                {{ row.id }}
-            </td>
-        </ng-container>
+<app-loader *ngIf="loading"></app-loader>
 
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-            <th
-                *matHeaderCellDef
-                mat-header-cell
-                mat-sort-header>
-                {{ "AUTHORS.NAME" | translate }}
-            </th>
-            <td
-                *matCellDef="let row"
-                mat-cell>
-                {{ row.name }}
-            </td>
-        </ng-container>
-
-        <!-- action Column -->
-        <ng-container matColumnDef="action">
-            <th
-                *matHeaderCellDef
-                mat-header-cell
-                mat-sort-header>
-                {{ "COMMON.ACTION" | translate }}
-            </th>
-            <td
-                *matCellDef="let row"
-                mat-cell>
+<div [hidden]="loading">
+    <div class="my-4 d-flex flex-wrap justify-content-between">
+        <ng-container [formGroup]="formFilter">
+            <mat-form-field>
+                <mat-label>
+                    {{ "COMMON.FILTER" | translate }}
+                </mat-label>
+                <input
+                    formControlName="search"
+                    matInput />
                 <button
-                    (click)="openManagementDialog(row)"
-                    mat-icon-button>
-                    <feather-icon
-                        class="cursor-pointer"
-                        name="edit-2"></feather-icon>
+                    (click)="search.setValue('')"
+                    *ngIf="search.value"
+                    aria-label="Clear"
+                    class="clear-filter"
+                    data-cy="search-clear"
+                    mat-icon-button
+                    matSuffix>
+                    <feather-icon name="x"></feather-icon>
                 </button>
-                <button
-                    (click)="onDelete(row)"
-                    color="warn"
-                    mat-icon-button>
-                    <feather-icon
-                        class="cursor-pointer"
-                        name="trash"></feather-icon>
-                </button>
-            </td>
+            </mat-form-field>
         </ng-container>
+        <button
+            (click)="openManagementDialog()"
+            color="primary"
+            mat-raised-button>
+            {{ "AUTHORS.ADD" | translate }}
+        </button>
+    </div>
+    <div class="table-responsive">
+        <table
+            [dataSource]="authorsData"
+            mat-table
+            matSort>
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+                <th
+                    *matHeaderCellDef
+                    mat-header-cell
+                    mat-sort-header>
+                    #
+                </th>
+                <td
+                    *matCellDef="let row"
+                    mat-cell>
+                    {{ row.id }}
+                </td>
+            </ng-container>
 
-        <tr
-            *matHeaderRowDef="columns"
-            mat-header-row></tr>
-        <tr
-            *matRowDef="let row; columns: columns"
-            mat-row></tr>
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+                <th
+                    *matHeaderCellDef
+                    mat-header-cell
+                    mat-sort-header>
+                    {{ "AUTHORS.NAME" | translate }}
+                </th>
+                <td
+                    *matCellDef="let row"
+                    mat-cell>
+                    {{ row.name }}
+                </td>
+            </ng-container>
 
-        <!-- Row shown when there is no matching data. -->
-        <tr
-            *matNoDataRow
-            class="mat-row">
-            <td
-                class="mat-cell p-5 text-center"
-                colspan="2">
-                {{ "COMMON.NO_DATA_FOUND" | translate }} "{{ search.value }}"
-            </td>
-        </tr>
-    </table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            <!-- action Column -->
+            <ng-container matColumnDef="action">
+                <th
+                    *matHeaderCellDef
+                    mat-header-cell
+                    mat-sort-header>
+                    {{ "COMMON.ACTION" | translate }}
+                </th>
+                <td
+                    *matCellDef="let row"
+                    mat-cell>
+                    <button
+                        (click)="openManagementDialog(row)"
+                        mat-icon-button>
+                        <feather-icon
+                            class="cursor-pointer"
+                            name="edit-2"></feather-icon>
+                    </button>
+                    <button
+                        (click)="onDelete(row)"
+                        color="warn"
+                        mat-icon-button>
+                        <feather-icon
+                            class="cursor-pointer"
+                            name="trash"></feather-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr
+                *matHeaderRowDef="columns"
+                mat-header-row></tr>
+            <tr
+                *matRowDef="let row; columns: columns"
+                mat-row></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr
+                *matNoDataRow
+                class="mat-row">
+                <td
+                    class="mat-cell p-5 text-center"
+                    colspan="2">
+                    {{ "COMMON.NO_DATA_FOUND" | translate }} "{{ search.value }}"
+                </td>
+            </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    </div>
 </div>

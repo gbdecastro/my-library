@@ -1,4 +1,4 @@
-export const LANG_PT_BR = "pt-br";
+export const LANG_PT_BR = "pt";
 export const I18N_PTBR = {
     MENU: {
         BOOKS: "Livros",
@@ -16,6 +16,14 @@ export const I18N_PTBR = {
         CREATE_MESSAGE: "Autor criado com sucesso!",
         UPDATE_MESSAGE: "Autor alterado com sucesso!",
         DELETE_MESSAGE: "Autor excluído com sucesso!",
+    },
+    SUBJECTS: {
+        DESCRIPTION: "Descrição",
+        ADD: "Criar Assunto",
+        MANAGEMENT: "Gerenciar Assunto",
+        CREATE_MESSAGE: "Assunto criado com sucesso!",
+        UPDATE_MESSAGE: "Assunto alterado com sucesso!",
+        DELETE_MESSAGE: "Assunto excluído com sucesso!",
     },
     COMMON: {
         NOT_FOUND: "Página não encontrada",

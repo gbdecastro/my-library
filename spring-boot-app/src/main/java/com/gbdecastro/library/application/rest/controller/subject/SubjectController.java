@@ -21,6 +21,7 @@ import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import javax.transaction.Transactional;
 
 @BaseController(SubjectController.API_URL)
 public class SubjectController implements SubjectApi {
@@ -100,6 +101,7 @@ public class SubjectController implements SubjectApi {
 
     @Override
     @DeleteMapping("/{id}")
+    @Transactional()
     public ResponseEntity<Void> delete(Long id) {
         service.delete(id);
 

@@ -20,6 +20,12 @@ export class ApiInterceptor implements HttpInterceptor {
     ) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        request = request.clone({
+            setHeaders: {
+                "Accept-Language": this.i18nService.currentLang || this.i18nService.defaultLang,
+            },
+        });
+
         return next.handle(request).pipe(
             catchError((error: HttpErrorResponse) => {
                 const notAuthorized = [403, 401];
