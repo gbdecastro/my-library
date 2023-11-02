@@ -45,7 +45,7 @@ public class BookController implements BookApi {
 
         CollectionModel<BookResponse> entityModel = CollectionModel.of(response, self, create, update, delete, findOne);
 
-        return ResponseEntity.ok(entityModel);
+        return ResponseEntity.ok().body(entityModel);
     }
 
     @Override
@@ -73,7 +73,6 @@ public class BookController implements BookApi {
         Link findOne = BookLinks.findOne(response.getId());
         Link update = BookLinks.update(response.getId(), null);
         Link delete = BookLinks.delete(response.getId());
-
 
         EntityModel<BookResponse> entityModel = EntityModel.of(response, selfLink, findOne, update, delete);
 

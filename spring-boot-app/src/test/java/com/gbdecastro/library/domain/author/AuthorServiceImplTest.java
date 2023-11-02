@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_EDITION;
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_ID;
+import static com.gbdecastro.library.domain.book.BookConstant.BOOK_PRICE;
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_PUB_YEAR;
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_TITLE;
 import static com.gbdecastro.library.domain.shared.AuthorConstant.AUTHOR_ID;
@@ -62,12 +63,12 @@ public class AuthorServiceImplTest extends BaseDomainTest {
     }
 
     @Test
-    @DisplayName("List all authors by ids")
-    void findAllByIds_shouldReturnAnAuthorList() {
+    @DisplayName("List all authors or create by ids")
+    void findAllOrCreate_shouldReturnAnAuthorList() {
         givenAuthor(AUTHOR_ID, AUTHOR_NAME);
         givenAuthorList(authorTest);
         whenCalling_repositoryFindAllById(authorListTest.stream().map(Author::getId).collect(Collectors.toSet()));
-        whenCalled_findAllByIds(authorListTest.stream().map(Author::getId).collect(Collectors.toSet()));
+        whenCalled_findAllOrCreate(authorListTest.stream().collect(Collectors.toSet()));
         thenShouldReturnAnAuthorListByIds(authorListTest.stream().map(Author::getId).collect(Collectors.toSet()));
     }
 
@@ -94,7 +95,7 @@ public class AuthorServiceImplTest extends BaseDomainTest {
     void delete_throwDomainExceptionWhenBooksLinked() {
         // Given
         givenAuthor(AUTHOR_ID, AUTHOR_NAME);
-        givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR);
+        givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR, BOOK_PRICE);
         givenAnAuthorToBook(bookTest, authorTest);
 
         // When
@@ -241,8 +242,8 @@ public class AuthorServiceImplTest extends BaseDomainTest {
         authorResult = service.findById(id);
     }
 
-    private void whenCalled_findAllByIds(Set<Long> ids) {
-        authorListResult = service.findAllByIds(ids);
+    private void whenCalled_findAllOrCreate(Set<Author> authors) {
+        authorListResult = service.findAllOrCreate(authors).stream().toList();
     }
 
     private void whenCalled_deleteById(Long authorId) {

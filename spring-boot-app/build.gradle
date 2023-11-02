@@ -94,4 +94,12 @@ jacocoTestReport {
 		csv.enabled false
 		html.destination file("${projectDir}/jacoco")
 	}
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, includes: [
+					"com/gbdecastro/**/*Controller.class",
+					"com/gbdecastro/**/*ServiceImpl.class",
+			])
+		}))
+	}
 }

@@ -1,7 +1,9 @@
 package com.gbdecastro.library.domain.book;
 
+import com.gbdecastro.library.application.rest.controller.author.AuthorMapper;
 import com.gbdecastro.library.application.rest.controller.book.BookMapper;
 import com.gbdecastro.library.application.rest.controller.book.BookRequest;
+import com.gbdecastro.library.application.rest.controller.subject.SubjectMapper;
 import com.gbdecastro.library.domain.author.AuthorService;
 import com.gbdecastro.library.domain.shared.BaseDomainTest;
 import com.gbdecastro.library.domain.subject.SubjectService;
@@ -19,6 +21,7 @@ import java.util.Set;
 
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_EDITION;
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_ID;
+import static com.gbdecastro.library.domain.book.BookConstant.BOOK_PRICE;
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_PUB_YEAR;
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_TITLE;
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_TITLE_LARGE;
@@ -50,6 +53,12 @@ public class BookServiceImplTest extends BaseDomainTest {
     private BookMapper mapper;
 
     @Mock
+    private AuthorMapper authorMapper;
+
+    @Mock
+    private SubjectMapper subjectMapper;
+
+    @Mock
     private AuthorService authorService;
 
     @Mock
@@ -65,7 +74,7 @@ public class BookServiceImplTest extends BaseDomainTest {
     @Test
     @DisplayName("List all books")
     void findAll_shouldReturnABookList() {
-        givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR);
+        givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR, BOOK_PRICE);
         whenCalling_repositoryFindAll();
         whenCalled_findAll();
         thenShouldReturnABookList();
@@ -74,7 +83,7 @@ public class BookServiceImplTest extends BaseDomainTest {
     @Test
     @DisplayName("List a book by id")
     void findById_shouldReturnABook() {
-        givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR);
+        givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR, BOOK_PRICE);
         whenCalling_repositoryFindById(bookTest.getId(), Optional.of(bookTest));
         whenCalled_findById(bookTest.getId());
         thenShouldReturnABook(bookTest.getId());
@@ -83,7 +92,7 @@ public class BookServiceImplTest extends BaseDomainTest {
     @Test
     @DisplayName("Finding a book by id but an exception is expected: book not found")
     void findById_throwEntityNotFoundException() {
-        givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR);
+        givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR, BOOK_PRICE);
         whenCalling_repositoryFindById(bookTest.getId(), Optional.empty());
         whenCalling_messageContext(BOOK_NOT_FOUND);
         thenThrowEntityNotFoundException(() -> service.findById(BOOK_ID), BOOK_NOT_FOUND);
@@ -94,8 +103,8 @@ public class BookServiceImplTest extends BaseDomainTest {
     void create_shouldSucceedWithValidData() {
         givenAuthor(AUTHOR_ID, AUTHOR_NAME);
         givenSubject(SUBJECT_ID, SUBJECT_DESCRIPTION);
-        givenBookRequest(BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR, Set.of(authorTest.getId()), Set.of(subjectTest.getId()));
-        givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR);
+        givenBookRequest(BOOK_TITLE, BOOK_EDITION, BOOK_PRICE, BOOK_PUB_YEAR, Set.of(authorTest), Set.of(subjectTest));
+        givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR, BOOK_PRICE);
 
         whenCalling_repositorySave(bookTest);
         whenCalled_create(bookRequestTest);
@@ -106,7 +115,7 @@ public class BookServiceImplTest extends BaseDomainTest {
     @Test
     @DisplayName("Creating a book with missing title should throw DomainException")
     void create_throwDomainExceptionWhenTitleMissing() {
-        givenBookRequest(null, BOOK_EDITION, BOOK_PUB_YEAR, null, null);
+        givenBookRequest(null, BOOK_EDITION, BOOK_PRICE, BOOK_PUB_YEAR, null, null);
         whenCalling_messageContext("title_required");
         thenThrowDomainException(() -> service.create(bookRequestTest), HttpStatus.BAD_REQUEST.value(), "title_required");
         verify(repository, never()).save(any());
@@ -115,10 +124,21 @@ public class BookServiceImplTest extends BaseDomainTest {
     @Test
     @DisplayName("Creating a book with title exceeding 40 characters should throw DomainException")
     void create_throwDomainExceptionWhenTitleTooLong() {
-        givenBookRequest(BOOK_TITLE_LARGE, BOOK_EDITION, BOOK_PUB_YEAR, null, null);
+        givenBookRequest(BOOK_TITLE_LARGE, BOOK_EDITION, BOOK_PRICE, BOOK_PUB_YEAR, null, null);
         whenCalling_messageContext("title_max_length");
 
         thenThrowDomainException(() -> service.create(bookRequestTest), HttpStatus.BAD_REQUEST.value(), "title_max_length");
+
+        verify(repository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("Creating a book with price 0 should throw DomainException")
+    void create_throwDomainExceptionWhenPrice0() {
+        givenBookRequest(BOOK_TITLE, BOOK_EDITION, 0.0, BOOK_PUB_YEAR, null, null);
+        whenCalling_messageContext("price_greater_than_0");
+
+        thenThrowDomainException(() -> service.create(bookRequestTest), HttpStatus.BAD_REQUEST.value(), "price_greater_than_0");
 
         verify(repository, never()).save(any());
     }
@@ -128,8 +148,8 @@ public class BookServiceImplTest extends BaseDomainTest {
     void update_shouldSucceedWithValidData() {
         givenAuthor(AUTHOR_ID, AUTHOR_NAME);
         givenSubject(SUBJECT_ID, SUBJECT_DESCRIPTION);
-        givenBookRequest(BOOK_TITLE_OTHER, BOOK_EDITION, BOOK_PUB_YEAR, Set.of(authorTest.getId()), Set.of(subjectTest.getId()));
-        givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR);
+        givenBookRequest(BOOK_TITLE_OTHER, BOOK_EDITION, BOOK_PRICE, BOOK_PUB_YEAR, Set.of(authorTest), Set.of(subjectTest));
+        givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR, BOOK_PRICE);
 
         whenCalling_repositoryFindById(BOOK_ID, Optional.of(bookTest));
         whenCalling_repositorySaveAndFlush(bookTest);
@@ -144,7 +164,7 @@ public class BookServiceImplTest extends BaseDomainTest {
     @Test
     @DisplayName("Deleting a book should succeed")
     void delete_shouldSucceed() {
-        givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR);
+        givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR, BOOK_PRICE);
         whenCalling_repositoryFindById(BOOK_ID, Optional.of(bookTest));
 
         whenCalled_delete(BOOK_ID);

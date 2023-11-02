@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { map, Observable } from "rxjs";
 import { IAuthorsResource, IAuthorsResourceList } from "../interfaces/authors.resources";
 import { IAuthorRequest } from "../interfaces/authors.request";
+import { IAuthorResponse } from "@app/core/authors/interfaces/authors.response";
 
 @Injectable({
     providedIn: "root",
@@ -13,8 +14,16 @@ export class AuthorsService {
 
     constructor(private http: HttpClient) {}
 
-    getAll(): Observable<IAuthorsResourceList> {
-        return this.http.get<IAuthorsResourceList>(this.API_URL);
+    getAll(): Observable<IAuthorResponse[]> {
+        return this.http.get<IAuthorsResourceList>(this.API_URL).pipe(
+            map((response) => {
+                if (response._embedded?.authorResponseList) {
+                    return response._embedded.authorResponseList as IAuthorResponse[];
+                } else {
+                    return [];
+                }
+            })
+        );
     }
 
     getById(id: number): Observable<IAuthorsResource> {

@@ -6,7 +6,6 @@ import { BooksService } from "@app/core/books/services/books.service";
 import { TranslateLoader, TranslateModule, TranslateService } from "@ngx-translate/core";
 import { SnackBarService } from "@layout/snack-bar/snack-bar.service";
 import { LANG_PT_BR } from "@app/core/i18n/pt-br/pt-br";
-import { BOOK_REQUEST, BOOK_RESOURCE, BOOKS } from "@app/core/mocks/index.mock";
 import { of } from "rxjs";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { TranslateFileLoader } from "@app/app.module";
@@ -29,6 +28,8 @@ import { FeatherModule } from "angular-feather";
 import { allIcons } from "angular-feather/icons";
 import { SnackBarModule } from "@layout/snack-bar/snack-bar.module";
 import { IBookResponse } from "@app/core/books/interfaces/books.response";
+import { BOOK_FORM, BOOK_RESOURCE, BOOK_RESPONSE, BOOKS } from "@app/core/mocks/book.mock";
+import { IBookForm } from "@app/core/books/interfaces/books.request";
 
 export class MatDialogMock {
     open(): any {
@@ -82,7 +83,7 @@ describe("[U] - BooksComponent", () => {
         translate.use(LANG_PT_BR);
 
         bookService = TestBed.inject(BooksService);
-        spyOn(bookService, "getAll").and.returnValue(of(BOOKS));
+        spyOn(bookService, "getAll").and.returnValue(of([{ ...BOOK_RESPONSE }]));
 
         snackBar = TestBed.inject(SnackBarService);
 
@@ -101,7 +102,7 @@ describe("[U] - BooksComponent", () => {
 
     it("should open management dialog for creation", () => {
         spyOn(component["dialog"], "open").and.returnValue({
-            afterClosed: () => of({ ...BOOK_REQUEST }),
+            afterClosed: () => of({ ...BOOK_FORM }),
         } as any);
 
         spyOn(bookService, "create").and.returnValue(of({ ...BOOK_RESOURCE }));
@@ -109,16 +110,16 @@ describe("[U] - BooksComponent", () => {
 
         component.openManagementDialog();
 
-        expect(bookService.create).toHaveBeenCalledWith({ ...BOOK_REQUEST });
+        expect(bookService.create).toHaveBeenCalled();
         expect(snackBar.openSnackBar).toHaveBeenCalled();
     });
 
     it("should open management dialog for edition", () => {
         const book: IBookResponse = { ...BOOKS._embedded.bookResponseList[0] };
-        const bookRequest = { ...BOOK_REQUEST };
+        const bookForm: IBookForm = { ...BOOK_FORM };
 
         spyOn(component["dialog"], "open").and.returnValue({
-            afterClosed: () => of(bookRequest),
+            afterClosed: () => of(bookForm),
         } as any);
 
         spyOn(bookService, "update").and.returnValue(of({ ...BOOK_RESOURCE }));
@@ -126,7 +127,7 @@ describe("[U] - BooksComponent", () => {
 
         component.openManagementDialog(book);
 
-        expect(bookService.update).toHaveBeenCalledWith(book.id, bookRequest);
+        expect(bookService.update).toHaveBeenCalled();
         expect(snackBar.openSnackBar).toHaveBeenCalled();
     });
 

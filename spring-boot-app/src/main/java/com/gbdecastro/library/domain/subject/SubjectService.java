@@ -6,7 +6,7 @@ import java.util.Set;
 public interface SubjectService {
     List<Subject> findAll();
 
-    List<Subject> findAllByIds(Set<Long> ids);
+    Set<Subject> findAllOrCreate(Set<Subject> subjects);
 
     Subject findById(Long id);
 

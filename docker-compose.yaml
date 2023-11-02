@@ -28,12 +28,12 @@ services:
       - library-mysql
 
   library-angular-app:
-    build:
-      context: ./angular-app
-      dockerfile: Dockerfile
+    build: ./angular-app
     container_name: angular_app
     ports:
       - "4200:4200"
+    volumes:
+      - ./angular-app:/app
     depends_on:
       - library-spring-boot-app
 

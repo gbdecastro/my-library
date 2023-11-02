@@ -55,9 +55,7 @@ export class SubjectsComponent implements OnInit, OnDestroy {
             .getAll()
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((data) => {
-                this.subjectsData = new MatTableDataSource<ISubjectResponse>(
-                    data._embedded.subjectResponseList
-                );
+                this.subjectsData = new MatTableDataSource<ISubjectResponse>(data);
                 this.subjectsData.paginator = this.paginator;
                 this.subjectsData.sort = this.sort;
                 this.loading = false;

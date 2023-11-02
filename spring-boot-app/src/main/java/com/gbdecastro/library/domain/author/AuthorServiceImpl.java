@@ -11,8 +11,10 @@ import org.springframework.http.HttpStatus;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.gbdecastro.library.domain.shared.utils.StringUtils.COMMA;
 
@@ -42,8 +44,20 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public List<Author> findAllByIds(Set<Long> ids) {
-        return this.repository.findAllById(ids);
+    public Set<Author> findAllOrCreate(Set<Author> authors) {
+        List<Author> entities = repository.findAllById(authors.stream().map(Author::getId).collect(Collectors.toSet()));
+
+        Set<Long> entityIds = entities.stream().map(Author::getId).collect(Collectors.toSet());
+
+        Set<Author> entitiesToCreate = authors.stream().filter(entity -> !entityIds.contains(entity.getId())).collect(Collectors.toSet());
+
+        if (!entitiesToCreate.isEmpty()) {
+            repository.saveAll(entitiesToCreate);
+            entities.addAll(entitiesToCreate);
+        }
+
+        return new HashSet<>(entities);
+
     }
 
     @Override

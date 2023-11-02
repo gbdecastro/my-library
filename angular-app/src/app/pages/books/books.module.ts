@@ -21,6 +21,9 @@ import { MatIconModule } from "@angular/material/icon";
 import { BookPipesModule } from "@app/core/books/pipes/book-pipes.module";
 import { NgbTooltipModule } from "@ng-bootstrap/ng-bootstrap";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { NgxCurrencyDirective } from "ngx-currency";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
 
 @NgModule({
     declarations: [BooksComponent, UpsertComponent],
@@ -44,6 +47,9 @@ import { MatTooltipModule } from "@angular/material/tooltip";
         BookPipesModule,
         NgbTooltipModule,
         MatTooltipModule,
+        NgxCurrencyDirective,
+        MatDatepickerModule,
+        MatNativeDateModule,
     ],
 })
 export class BooksModule {}

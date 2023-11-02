@@ -95,6 +95,21 @@
                 </td>
             </ng-container>
 
+            <!-- price Column -->
+            <ng-container matColumnDef="price">
+                <th
+                    *matHeaderCellDef
+                    mat-header-cell
+                    mat-sort-header>
+                    {{ "BOOKS.PRICE" | translate }}
+                </th>
+                <td
+                    *matCellDef="let row"
+                    mat-cell>
+                    {{ row.price | currency: "BRL" : "R$" }}
+                </td>
+            </ng-container>
+
             <!-- Authors Column -->
             <ng-container matColumnDef="authors">
                 <th

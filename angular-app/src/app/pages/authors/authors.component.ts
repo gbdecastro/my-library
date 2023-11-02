@@ -55,9 +55,7 @@ export class AuthorsComponent implements OnInit, OnDestroy {
             .getAll()
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((data) => {
-                this.authorsData = new MatTableDataSource<IAuthorResponse>(
-                    data._embedded.authorResponseList
-                );
+                this.authorsData = new MatTableDataSource<IAuthorResponse>(data);
                 this.authorsData.paginator = this.paginator;
                 this.authorsData.sort = this.sort;
                 this.loading = false;

@@ -27,8 +27,8 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { MatDialogMock } from "@app/pages/books/books.component.spec";
 import { LANG_PT_BR } from "@app/core/i18n/pt-br/pt-br";
 import { of } from "rxjs";
-import { AUTHOR_REQUEST, AUTHOR_RESOURCE, AUTHORS } from "@app/core/mocks/index.mock";
 import { IAuthorResponse } from "@app/core/authors/interfaces/authors.response";
+import { AUTHOR_REQUEST, AUTHOR_RESOURCE, AUTHOR_RESPONSE } from "@app/core/mocks/authors.mock";
 
 describe("[U] - AuthorsComponent", () => {
     let component: AuthorsComponent;
@@ -73,7 +73,7 @@ describe("[U] - AuthorsComponent", () => {
         translate.use(LANG_PT_BR);
 
         service = TestBed.inject(AuthorsService);
-        spyOn(service, "getAll").and.returnValue(of({ ...AUTHORS }));
+        spyOn(service, "getAll").and.returnValue(of([{ ...AUTHOR_RESPONSE }]));
 
         snackBar = TestBed.inject(SnackBarService);
 
@@ -105,7 +105,7 @@ describe("[U] - AuthorsComponent", () => {
     });
 
     it("should open management dialog for edition", () => {
-        const author: IAuthorResponse = { ...AUTHORS._embedded.authorResponseList[0] };
+        const author: IAuthorResponse = { ...AUTHOR_RESPONSE };
         const authorRequest = { ...AUTHOR_REQUEST };
 
         spyOn(component["dialog"], "open").and.returnValue({
@@ -122,7 +122,7 @@ describe("[U] - AuthorsComponent", () => {
     });
 
     it("should delete a author", () => {
-        const author: IAuthorResponse = AUTHORS._embedded.authorResponseList[0];
+        const author: IAuthorResponse = { ...AUTHOR_RESPONSE };
 
         spyOn(component["dialog"], "open").and.returnValue({
             afterClosed: () => of(true),

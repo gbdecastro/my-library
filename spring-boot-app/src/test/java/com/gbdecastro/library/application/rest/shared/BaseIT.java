@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_EDITION;
+import static com.gbdecastro.library.domain.book.BookConstant.BOOK_PRICE;
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_PUB_YEAR;
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_TITLE;
 import static com.gbdecastro.library.domain.shared.AuthorConstant.AUTHOR_NAME;
@@ -77,7 +78,7 @@ public class BaseIT {
     }
 
     protected void givenBook() {
-        bookIT = Book.builder().title(BOOK_TITLE).edition(BOOK_EDITION).publicationYear(BOOK_PUB_YEAR).build();
+        bookIT = Book.builder().title(BOOK_TITLE).edition(BOOK_EDITION).publicationYear(BOOK_PUB_YEAR).price(BOOK_PRICE).build();
 
         bookIT = bookRepository.save(bookIT);
     }

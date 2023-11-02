@@ -43,6 +43,9 @@ public class Book extends Audit {
     @Column(nullable = false)
     private Integer edition;
 
+    @Column(nullable = false)
+    private Double price;
+
     @Column(nullable = false, length = 4)
     private String publicationYear;
 

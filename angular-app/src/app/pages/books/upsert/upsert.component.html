@@ -41,7 +41,7 @@
                 required
                 type="number" />
             <button
-                (click)="edition.setValue('')"
+                (click)="edition.setValue(0)"
                 *ngIf="edition.value"
                 aria-label="Clear"
                 class="clear-edition"
@@ -56,47 +56,63 @@
         </mat-form-field>
 
         <mat-form-field class="w-100">
-            <mat-label>
-                {{ "BOOKS.PUBLICATION_YEAR" | translate }}
-            </mat-label>
             <input
-                [maxlength]="4"
-                [minLength]="4"
+                [matDatepicker]="dp"
                 formControlName="publicationYear"
                 matInput
                 required />
+            <mat-datepicker-toggle
+                [for]="dp"
+                matSuffix>
+            </mat-datepicker-toggle>
+            <mat-datepicker
+                #dp
+                (yearSelected)="chosenYearHandler($event, dp)"
+                startView="multi-year">
+            </mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="w-100">
+            <mat-label>
+                {{ "BOOKS.PRICE" | translate }}
+            </mat-label>
+            <input
+                currencyMask
+                formControlName="price"
+                matInput
+                required />
             <button
-                (click)="publicationYear.setValue('')"
-                *ngIf="publicationYear.value"
+                (click)="price.setValue(0)"
+                *ngIf="price.value"
                 aria-label="Clear"
-                class="clear-publicationYear"
-                data-cy="publicationYear-clear"
+                class="clear-price"
+                data-cy="price-clear"
                 mat-icon-button
                 matSuffix>
                 <feather-icon name="x"></feather-icon>
             </button>
-            <mat-error *ngIf="publicationYear.hasError('required')">
+            <mat-error *ngIf="price.hasError('required')">
                 {{ "COMMON.REQUIRED_FIELD" | translate }}
             </mat-error>
-            <mat-error *ngIf="publicationYear.hasError('maxlength')">
+            <mat-error *ngIf="price.hasError('maxlength')">
                 {{ "COMMON.MAX_LENGTH_ERROR" | translate: { max: 4 } }}
             </mat-error>
-            <mat-error *ngIf="publicationYear.hasError('minlength')">
+            <mat-error *ngIf="price.hasError('min')">
                 {{ "COMMON.MIN_LENGTH_ERROR" | translate: { max: 4 } }}
             </mat-error>
         </mat-form-field>
 
         <div class="w-100">
             <ng-select
+                [addTag]="tagAuthor"
                 [clearable]="true"
                 [closeOnSelect]="false"
                 [items]="authorOptions"
-                [loading]="authorOptions.length === 0"
+                [loading]="loading"
                 [multiple]="true"
                 [placeholder]="'MENU.AUTHORS' | translate"
                 [searchable]="true"
                 bindLabel="name"
-                bindValue="id"
                 formControlName="authors"
                 required>
                 <ng-template
@@ -123,15 +139,15 @@
 
         <div class="w-100">
             <ng-select
+                [addTag]="tagSubject"
                 [clearable]="true"
                 [closeOnSelect]="false"
                 [items]="subjectOptions"
-                [loading]="subjectOptions.length === 0"
+                [loading]="loading"
                 [multiple]="true"
                 [placeholder]="'MENU.SUBJECTS' | translate"
                 [searchable]="true"
                 bindLabel="description"
-                bindValue="id"
                 formControlName="subjects"
                 required>
                 <ng-template

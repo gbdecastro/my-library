@@ -10,8 +10,10 @@ import org.springframework.http.HttpStatus;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.gbdecastro.library.domain.shared.utils.StringUtils.COMMA;
 
@@ -33,8 +35,19 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public List<Subject> findAllByIds(Set<Long> ids) {
-        return this.repository.findAllById(ids);
+    public Set<Subject> findAllOrCreate(Set<Subject> subjects) {
+        List<Subject> entities = repository.findAllById(subjects.stream().map(Subject::getId).collect(Collectors.toSet()));
+
+        Set<Long> entityIds = entities.stream().map(Subject::getId).collect(Collectors.toSet());
+
+        Set<Subject> entitiesToCreate = subjects.stream().filter(entity -> !entityIds.contains(entity.getId())).collect(Collectors.toSet());
+
+        if (!entitiesToCreate.isEmpty()) {
+            repository.saveAll(entitiesToCreate);
+            entities.addAll(entitiesToCreate);
+        }
+
+        return new HashSet<>(entities);
     }
 
     @Override

@@ -1,14 +1,14 @@
 package com.gbdecastro.library.domain.book;
 
+import com.gbdecastro.library.application.rest.controller.author.AuthorMapper;
 import com.gbdecastro.library.application.rest.controller.book.BookMapper;
 import com.gbdecastro.library.application.rest.controller.book.BookRequest;
-import com.gbdecastro.library.domain.author.Author;
+import com.gbdecastro.library.application.rest.controller.subject.SubjectMapper;
 import com.gbdecastro.library.domain.author.AuthorService;
 import com.gbdecastro.library.domain.shared.DomainException;
 import com.gbdecastro.library.domain.shared.annotation.BaseService;
 import com.gbdecastro.library.domain.shared.message.MessageContext;
 import com.gbdecastro.library.domain.shared.utils.StringUtils;
-import com.gbdecastro.library.domain.subject.Subject;
 import com.gbdecastro.library.domain.subject.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,6 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static com.gbdecastro.library.domain.shared.utils.StringUtils.COMMA;
 
@@ -30,6 +29,12 @@ public class BookServiceImpl implements BookService {
 
     @Autowired
     private BookMapper mapper;
+
+    @Autowired
+    private AuthorMapper authorMapper;
+
+    @Autowired
+    private SubjectMapper subjectMapper;
 
     @Autowired
     private MessageContext messageContext;
@@ -51,19 +56,18 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public Book create(BookRequest bookRequest) {
 
-        Book book = Book.builder().edition(bookRequest.getEdition()).publicationYear(bookRequest.getPublicationYear()).title(bookRequest.getTitle()).build();
+        Book book = Book.builder().edition(bookRequest.getEdition()).publicationYear(bookRequest.getPublicationYear()).price(bookRequest.getPrice())
+            .title(bookRequest.getTitle()).build();
 
         this.validate(book);
 
         this.repository.save(book);
 
-        Set<Author> authors = new HashSet<>(authorService.findAllByIds(bookRequest.getAuthors()));
-        Set<Subject> subjects = new HashSet<>(subjectService.findAllByIds(bookRequest.getSubjects()));
-
-        book.setAuthors(authors);
-        book.setSubjects(subjects);
+        book.setAuthors(authorService.findAllOrCreate(authorMapper.responseToAuthorList(bookRequest.getAuthors())));
+        book.setSubjects(subjectService.findAllOrCreate(subjectMapper.responseToSubjectList(bookRequest.getSubjects())));
 
         return this.repository.save(book);
     }
@@ -78,15 +82,13 @@ public class BookServiceImpl implements BookService {
         repository.save(book);
 
 
-        Set<Author> authors = new HashSet<>(authorService.findAllByIds(bookRequest.getAuthors()));
-        Set<Subject> subjects = new HashSet<>(subjectService.findAllByIds(bookRequest.getSubjects()));
-
-        book.setAuthors(authors);
-        book.setSubjects(subjects);
+        book.setAuthors(authorService.findAllOrCreate(authorMapper.responseToAuthorList(bookRequest.getAuthors())));
+        book.setSubjects(subjectService.findAllOrCreate(subjectMapper.responseToSubjectList(bookRequest.getSubjects())));
 
         book.setEdition(bookRequest.getEdition());
         book.setTitle(bookRequest.getTitle());
         book.setPublicationYear(bookRequest.getPublicationYear());
+        book.setPrice(bookRequest.getPrice());
 
         this.validate(book);
 
@@ -118,6 +120,10 @@ public class BookServiceImpl implements BookService {
 
         if (StringUtils.isGreaterThan(book.getPublicationYear(), 4)) {
             errors.add(messageContext.getMessage("publication_year_max_length"));
+        }
+
+        if (book.getPrice() <= 0) {
+            errors.add(messageContext.getMessage("price_greater_than_0"));
         }
 
         if (!errors.isEmpty()) {

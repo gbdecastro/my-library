@@ -1,6 +1,8 @@
 package com.gbdecastro.library.domain.shared;
 
+import com.gbdecastro.library.application.rest.controller.author.AuthorResponse;
 import com.gbdecastro.library.application.rest.controller.book.BookRequest;
+import com.gbdecastro.library.application.rest.controller.subject.SubjectResponse;
 import com.gbdecastro.library.domain.author.Author;
 import com.gbdecastro.library.domain.book.Book;
 import com.gbdecastro.library.domain.shared.message.MessageContext;
@@ -10,7 +12,10 @@ import org.mockito.Mock;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -52,12 +57,27 @@ public class BaseDomainTest {
         subjectTest2 = Subject.builder().id(id).description(description).build();
     }
 
-    protected void givenBook(Long id, String title, Integer edition, String publicationYear) {
-        bookTest = Book.builder().id(id).title(title).edition(edition).publicationYear(publicationYear).build();
+    protected void givenBook(Long id, String title, Integer edition, String publicationYear, Double price) {
+        bookTest = Book.builder().id(id).title(title).edition(edition).price(price).publicationYear(publicationYear).build();
     }
 
-    protected void givenBookRequest(String title, Integer edition, String publicationYear, Set<Long> authors, Set<Long> subjects) {
-        bookRequestTest = BookRequest.builder().title(title).edition(edition).publicationYear(publicationYear).authors(authors).subjects(subjects).build();
+    protected void givenBookRequest(String title, Integer edition, Double price, String publicationYear, Set<Author> authors, Set<Subject> subjects) {
+
+        Set<SubjectResponse> subjectResponses = new HashSet<>();
+        Set<AuthorResponse> authorResponses = new HashSet<>();
+
+        if (!Objects.isNull(authors)) {
+            authorResponses =
+                authors.stream().map((item) -> AuthorResponse.builder().id(item.getId()).name(item.getName()).build()).collect(Collectors.toSet());
+        }
+
+        if (!Objects.isNull(subjects)) {
+            subjectResponses = subjects.stream().map((item) -> SubjectResponse.builder().id(item.getId()).description(item.getDescription()).build())
+                .collect(Collectors.toSet());
+        }
+
+        bookRequestTest = BookRequest.builder().title(title).price(price).edition(edition).publicationYear(publicationYear).authors(authorResponses)
+            .subjects(subjectResponses).build();
     }
 
     protected void givenAnAuthorToBook(Book book, Author author) {

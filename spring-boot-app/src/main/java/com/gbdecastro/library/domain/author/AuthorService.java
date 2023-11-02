@@ -8,7 +8,7 @@ public interface AuthorService {
 
     List<Author> findAll();
 
-    List<Author> findAllByIds(Set<Long> ids);
+    Set<Author> findAllOrCreate(Set<Author> authors);
 
     Author findById(Long id);
 

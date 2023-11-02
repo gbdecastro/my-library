@@ -6,7 +6,6 @@ import { SnackBarService } from "@layout/snack-bar/snack-bar.service";
 import { SubjectService } from "@app/core/subjects/services/subject.service";
 import { LANG_PT_BR } from "@app/core/i18n/pt-br/pt-br";
 import { of } from "rxjs";
-import { SUBJECT_REQUEST, SUBJECT_RESOURCE, SUBJECTS } from "@app/core/mocks/index.mock";
 import { FeatherModule } from "angular-feather";
 import { allIcons } from "angular-feather/icons";
 import { MatButtonModule } from "@angular/material/button";
@@ -29,6 +28,12 @@ import { TranslateFileLoader } from "@app/app.module";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { MatDialogMock } from "@app/pages/books/books.component.spec";
 import { ISubjectResponse } from "@app/core/subjects/interfaces/subject.response";
+import {
+    SUBJECT_REQUEST,
+    SUBJECT_RESOURCE,
+    SUBJECT_RESPONSE,
+    SUBJECTS,
+} from "@app/core/mocks/subject.mock";
 
 describe("[U] - SubjectsComponent", () => {
     let component: SubjectsComponent;
@@ -73,7 +78,7 @@ describe("[U] - SubjectsComponent", () => {
         translate.use(LANG_PT_BR);
 
         service = TestBed.inject(SubjectService);
-        spyOn(service, "getAll").and.returnValue(of({ ...SUBJECTS }));
+        spyOn(service, "getAll").and.returnValue(of([{ ...SUBJECT_RESPONSE }]));
 
         snackBar = TestBed.inject(SnackBarService);
 

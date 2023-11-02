@@ -21,6 +21,7 @@ public class BookResponse {
     private Long id;
     private String title;
     private Integer edition;
+    private Double price;
     private String publicationYear;
 
     @Builder.Default

@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { map, Observable } from "rxjs";
 import { IBooksResource, IBooksResourceList } from "@app/core/books/interfaces/books.resources";
 import { IBookRequest } from "@app/core/books/interfaces/books.request";
+import { IBookResponse } from "@app/core/books/interfaces/books.response";
 
 @Injectable({
     providedIn: "root",
@@ -13,8 +14,16 @@ export class BooksService {
 
     constructor(private http: HttpClient) {}
 
-    getAll(): Observable<IBooksResourceList> {
-        return this.http.get<IBooksResourceList>(this.API_URL);
+    getAll(): Observable<IBookResponse[]> {
+        return this.http.get<IBooksResourceList>(this.API_URL).pipe(
+            map((response) => {
+                if (response._embedded?.bookResponseList) {
+                    return response._embedded.bookResponseList as IBookResponse[];
+                } else {
+                    return [];
+                }
+            })
+        );
     }
 
     getById(id: number): Observable<IBooksResource> {

@@ -3,15 +3,16 @@ import { MatTableDataSource } from "@angular/material/table";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
-import { distinctUntilChanged, Subject, takeUntil } from "rxjs";
+import { distinctUntilChanged, finalize, Subject, takeUntil } from "rxjs";
 import { TranslateService } from "@ngx-translate/core";
 import { SnackBarService } from "@layout/snack-bar/snack-bar.service";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmationDialogComponent } from "@layout/confirmation-dialog/confirmation-dialog.component";
 import { IBookResponse } from "@app/core/books/interfaces/books.response";
 import { BooksService } from "@app/core/books/services/books.service";
-import { IBookRequest } from "@app/core/books/interfaces/books.request";
+import { IBookForm, IBookRequest } from "@app/core/books/interfaces/books.request";
 import { UpsertComponent } from "@app/pages/books/upsert/upsert.component";
+import { format, set } from "date-fns";
 
 @Component({
     selector: "app-books",
@@ -24,6 +25,7 @@ export class BooksComponent implements OnInit, OnDestroy {
         "title",
         "edition",
         "publicationYear",
+        "price",
         "authors",
         "subjects",
         "action",
@@ -63,9 +65,7 @@ export class BooksComponent implements OnInit, OnDestroy {
             .getAll()
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((data) => {
-                this.bookData = new MatTableDataSource<IBookResponse>(
-                    data._embedded.bookResponseList
-                );
+                this.bookData = new MatTableDataSource<IBookResponse>(data);
                 this.bookData.paginator = this.paginator;
                 this.bookData.sort = this.sort;
                 this.loading = false;
@@ -81,14 +81,14 @@ export class BooksComponent implements OnInit, OnDestroy {
         const dialog = this.dialog.open(UpsertComponent, {
             width: "60%",
             data: {
-                book: book,
+                book: this.generateBookForm(book),
             },
         });
 
         dialog
             .afterClosed()
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((data: IBookRequest | null) => {
+            .subscribe((data: IBookForm | null) => {
                 if (data) {
                     book ? this.update(book.id, data) : this.create(data);
                 }
@@ -107,7 +107,10 @@ export class BooksComponent implements OnInit, OnDestroy {
 
         dialog
             .afterClosed()
-            .pipe(takeUntil(this.unsubscribe$))
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                finalize(() => (this.loading = false))
+            )
             .subscribe((confirm) => {
                 if (confirm) {
                     this.loading = true;
@@ -122,17 +125,20 @@ export class BooksComponent implements OnInit, OnDestroy {
                                 message: this.i18n.instant("BOOKS.DELETE_MESSAGE"),
                                 type: "success",
                             });
-                            this.loading = false;
                         });
                 }
             });
     }
 
-    private create(book: IBookRequest): void {
+    private create(book: IBookForm): void {
         this.loading = true;
+        const bookRequest: IBookRequest = this.generateBookRequest(book);
         this.service
-            .create(book)
-            .pipe(takeUntil(this.unsubscribe$))
+            .create(bookRequest)
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                finalize(() => (this.loading = false))
+            )
             .subscribe((data) => {
                 this.bookData.data.push(data);
                 this.bookData.data = [...this.bookData.data];
@@ -141,15 +147,20 @@ export class BooksComponent implements OnInit, OnDestroy {
                     message: this.i18n.instant("BOOKS.CREATE_MESSAGE"),
                     type: "success",
                 });
-                this.loading = false;
             });
     }
 
-    private update(id: number, book: IBookRequest): void {
+    private update(id: number, book: IBookForm): void {
         this.loading = true;
+
+        const bookRequest: IBookRequest = this.generateBookRequest(book);
+
         this.service
-            .update(id, book)
-            .pipe(takeUntil(this.unsubscribe$))
+            .update(id, bookRequest)
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                finalize(() => (this.loading = false))
+            )
             .subscribe((data) => {
                 const index = this.bookData.data.findIndex((r) => r.id === data.id);
                 this.bookData.data[index] = data;
@@ -159,8 +170,32 @@ export class BooksComponent implements OnInit, OnDestroy {
                     message: this.i18n.instant("BOOKS.UPDATE_MESSAGE"),
                     type: "success",
                 });
-
-                this.loading = false;
             });
+    }
+
+    private generateBookRequest(book: IBookForm): IBookRequest {
+        return {
+            publicationYear: format(book.publicationYear, "yyyy"),
+            authors: book.authors,
+            subjects: book.subjects,
+            edition: book.edition,
+            title: book.title,
+            price: book.price,
+        };
+    }
+
+    private generateBookForm(book: IBookResponse | null): IBookForm | null {
+        if (!book) return book;
+
+        const year = parseInt(book.publicationYear);
+
+        return {
+            publicationYear: set(new Date(), { year }),
+            authors: book.authors,
+            subjects: book.subjects,
+            edition: book.edition,
+            title: book.title,
+            price: book.price,
+        };
     }
 }

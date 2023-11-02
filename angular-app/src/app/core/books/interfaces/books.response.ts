@@ -5,6 +5,7 @@ export interface IBookResponse {
     id: number;
     title: string;
     edition: number;
+    price: number;
     publicationYear: string;
 
     authors: IAuthorResponse[];

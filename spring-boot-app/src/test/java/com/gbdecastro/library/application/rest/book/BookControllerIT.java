@@ -1,7 +1,9 @@
 package com.gbdecastro.library.application.rest.book;
 
+import com.gbdecastro.library.application.rest.controller.author.AuthorResponse;
 import com.gbdecastro.library.application.rest.controller.book.BookController;
 import com.gbdecastro.library.application.rest.controller.book.BookRequest;
+import com.gbdecastro.library.application.rest.controller.subject.SubjectResponse;
 import com.gbdecastro.library.application.rest.shared.BaseIT;
 import com.gbdecastro.library.application.rest.shared.annotations.ParameterizedStringTest;
 import com.gbdecastro.library.domain.author.Author;
@@ -17,6 +19,7 @@ import javax.transaction.Transactional;
 import java.util.Set;
 
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_EDITION;
+import static com.gbdecastro.library.domain.book.BookConstant.BOOK_PRICE;
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_PUB_YEAR;
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_TITLE;
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_TITLE_OTHER;
@@ -71,17 +74,17 @@ public class BookControllerIT extends BaseIT {
     void create_shouldReturnTheCreatedBook() throws Exception {
         givenAuthor();
         givenSubject();
-        givenBookRequest(BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR, authorIT, subjectIT);
+        givenBookRequest(BOOK_TITLE, BOOK_EDITION, BOOK_PRICE, BOOK_PUB_YEAR, authorIT, subjectIT);
         whenRequestCreate(bookRequestIT);
         thenShouldReturnACreatedBook();
     }
 
     @ParameterizedStringTest
-    @DisplayName("Creating a book: Should return Domain Exception: 'book title is requried'")
+    @DisplayName("Creating a book: Should return Domain Exception: 'book title is required'")
     void create_shouldReturnDomainException_bookTitleIsRequired(String title) throws Exception {
         givenAuthor();
         givenSubject();
-        givenBookRequest(title, BOOK_EDITION, BOOK_PUB_YEAR, authorIT, subjectIT);
+        givenBookRequest(title, BOOK_EDITION, BOOK_PRICE, BOOK_PUB_YEAR, authorIT, subjectIT);
         whenRequestCreate(bookRequestIT);
         thenShouldReturnDomainException(HttpStatus.BAD_REQUEST.value(), messageContext.getMessage("title_required"));
     }
@@ -92,7 +95,7 @@ public class BookControllerIT extends BaseIT {
         givenBook();
         givenAuthor();
         givenSubject();
-        givenBookRequest(BOOK_TITLE_OTHER, BOOK_EDITION, BOOK_PUB_YEAR, authorIT, subjectIT);
+        givenBookRequest(BOOK_TITLE_OTHER, BOOK_EDITION, BOOK_PRICE, BOOK_PUB_YEAR, authorIT, subjectIT);
         whenRequestUpdate(bookIT.getId(), bookRequestIT);
         thenShouldReturnUpdatedBook();
     }
@@ -110,7 +113,7 @@ public class BookControllerIT extends BaseIT {
         givenBook();
         givenAuthor();
         givenSubject();
-        givenBookRequest(title, BOOK_EDITION, BOOK_PUB_YEAR, authorIT, subjectIT);
+        givenBookRequest(title, BOOK_EDITION, BOOK_PRICE, BOOK_PUB_YEAR, authorIT, subjectIT);
         whenRequestUpdate(bookIT.getId(), bookRequestIT);
         thenShouldReturnDomainException(HttpStatus.BAD_REQUEST.value(), messageContext.getMessage("title_required"));
     }
@@ -133,9 +136,11 @@ public class BookControllerIT extends BaseIT {
     // endregion
 
     // region given
-    protected void givenBookRequest(String title, Integer edition, String publicationYear, Author author, Subject subject) {
-        bookRequestIT = BookRequest.builder().title(title).edition(edition).publicationYear(publicationYear).subjects(Set.of(subject.getId()))
-            .authors(Set.of(author.getId())).build();
+    protected void givenBookRequest(String title, Integer edition, Double price, String publicationYear, Author author, Subject subject) {
+
+        bookRequestIT = BookRequest.builder().title(title).edition(edition).publicationYear(publicationYear).price(price)
+            .subjects(Set.of(SubjectResponse.builder().id(author.getId()).description(subject.getDescription()).build()))
+            .authors(Set.of(AuthorResponse.builder().id(author.getId()).name(author.getName()).build())).build();
     }
     // endregion
 

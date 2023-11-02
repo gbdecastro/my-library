@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_EDITION;
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_ID;
+import static com.gbdecastro.library.domain.book.BookConstant.BOOK_PRICE;
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_PUB_YEAR;
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_TITLE;
 import static com.gbdecastro.library.domain.subject.SubjectConstant.SUBJECT_DESCRIPTION;
@@ -63,12 +64,12 @@ public class SubjectServiceImplTest extends BaseDomainTest {
     }
 
     @Test
-    @DisplayName("List all subjects by ids")
-    void findAllByIds_shouldReturnAnSubjectList() {
+    @DisplayName("List all subjects or create by ids")
+    void findAllOrCreate_shouldReturnAnSubjectList() {
         givenSubject(SUBJECT_ID, SUBJECT_DESCRIPTION);
         givenSubjectList(subjectTest);
         whenCalling_repositoryFindAllById(subjectListTest.stream().map(Subject::getId).collect(Collectors.toSet()));
-        whenCalled_findAllByIds(subjectListTest.stream().map(Subject::getId).collect(Collectors.toSet()));
+        whenCalled_findAllOrCreate(subjectListTest.stream().collect(Collectors.toSet()));
         thenShouldReturnAnSubjectListByIds(subjectListTest.stream().map(Subject::getId).collect(Collectors.toSet()));
     }
 
@@ -95,7 +96,7 @@ public class SubjectServiceImplTest extends BaseDomainTest {
     void delete_throwDomainExceptionWhenBooksLinked() {
         // Given
         givenSubject(SUBJECT_ID, SUBJECT_DESCRIPTION);
-        givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR);
+        givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR, BOOK_PRICE);
         givenASubjectToBook(bookTest, subjectTest);
 
         // When
@@ -241,8 +242,8 @@ public class SubjectServiceImplTest extends BaseDomainTest {
         subjectResult = service.findById(id);
     }
 
-    private void whenCalled_findAllByIds(Set<Long> ids) {
-        subjectListResult = service.findAllByIds(ids);
+    private void whenCalled_findAllOrCreate(Set<Subject> subjects) {
+        subjectListResult = service.findAllOrCreate(subjects).stream().toList();
     }
 
     private void whenCalled_deleteById(Long subjectId) {

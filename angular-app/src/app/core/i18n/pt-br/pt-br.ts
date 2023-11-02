@@ -28,6 +28,7 @@ export const I18N_PTBR = {
     BOOKS: {
         TITLE: "Título",
         EDITION: "Edição",
+        PRICE: "Preço",
         PUBLICATION_YEAR: "Ano de Publicação",
         ADD: "Criar Livro",
         MANAGEMENT: "Gerenciar Livro",

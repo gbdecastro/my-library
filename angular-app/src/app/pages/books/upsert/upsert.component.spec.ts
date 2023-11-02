@@ -6,13 +6,6 @@ import { MAT_DIALOG_DATA, MatDialogModule } from "@angular/material/dialog";
 import { AuthorsService } from "@app/core/authors/services/authors.service";
 import { SubjectService } from "@app/core/subjects/services/subject.service";
 import { of } from "rxjs";
-import {
-    AUTHOR_RESOURCE,
-    AUTHORS,
-    BOOK_RESOURCE,
-    SUBJECT_RESOURCE,
-    SUBJECTS,
-} from "@app/core/mocks/index.mock";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
@@ -24,6 +17,10 @@ import { FeatherModule } from "angular-feather";
 import { allIcons } from "angular-feather/icons";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatIconModule } from "@angular/material/icon";
+import { BOOK_RESOURCE } from "@app/core/mocks/book.mock";
+import { AUTHOR_RESPONSE } from "@app/core/mocks/authors.mock";
+import { SUBJECT_RESPONSE } from "@app/core/mocks/subject.mock";
+import { MatDatepicker, MatDatepickerModule } from "@angular/material/datepicker";
 
 describe("[U] Books - UpsertComponent", () => {
     let component: UpsertComponent;
@@ -50,6 +47,7 @@ describe("[U] Books - UpsertComponent", () => {
                 NgSelectModule,
                 HttpClientTestingModule,
                 MatDialogModule,
+                MatDatepickerModule,
                 MatIconModule,
                 FeatherModule.pick(allIcons),
             ],
@@ -63,8 +61,8 @@ describe("[U] Books - UpsertComponent", () => {
         authorService = TestBed.inject(AuthorsService);
         subjectService = TestBed.inject(SubjectService);
 
-        spyOn(authorService, "getAll").and.returnValue(of({ ...AUTHORS }));
-        spyOn(subjectService, "getAll").and.returnValue(of({ ...SUBJECTS }));
+        spyOn(authorService, "getAll").and.returnValue(of([{ ...AUTHOR_RESPONSE }]));
+        spyOn(subjectService, "getAll").and.returnValue(of([{ ...SUBJECT_RESPONSE }]));
 
         fixture = TestBed.createComponent(UpsertComponent);
         component = fixture.componentInstance;
@@ -100,16 +98,6 @@ describe("[U] Books - UpsertComponent", () => {
         expect(editionControl.hasError("min")).toBeTruthy();
     });
 
-    it("should require the 'publicationYear' field with a 4-digit value", () => {
-        const publicationYearControl = component.publicationYear;
-        publicationYearControl.setValue("23"); // Set a value with less than 4 digits
-
-        expect(publicationYearControl.valid).toBeFalsy();
-        expect(publicationYearControl.hasError("required")).toBeFalsy();
-        expect(publicationYearControl.hasError("minlength")).toBeTruthy();
-        expect(publicationYearControl.hasError("maxlength")).toBeFalsy();
-    });
-
     it("should require the 'authors' and 'subjects' fields", () => {
         const authorsControl = component.authors;
         const subjectsControl = component.subjects;
@@ -125,8 +113,21 @@ describe("[U] Books - UpsertComponent", () => {
     });
 
     it("should load author and subject options", () => {
-        expect(component.authorOptions).toEqual([{ ...AUTHOR_RESOURCE }]);
-        expect(component.subjectOptions).toEqual([{ ...SUBJECT_RESOURCE }]);
+        expect(component.authorOptions).toEqual([{ ...AUTHOR_RESPONSE }]);
+        expect(component.subjectOptions).toEqual([{ ...SUBJECT_RESPONSE }]);
+    });
+
+    it("should add tag to author and subject", () => {
+        const name = "test";
+        const description = "test";
+        expect(component.tagAuthor(name)).toEqual({ name });
+        expect(component.tagSubject(description)).toEqual({ description });
+    });
+
+    it("should choice year", () => {
+        const date = new Date();
+        component.chosenYearHandler(date, { close(): void {} } as MatDatepicker<any>);
+        expect(component.publicationYear.value).toEqual(date);
     });
 
     it("should unsubscribe from observables on component destruction", () => {

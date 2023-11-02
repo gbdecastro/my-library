@@ -9,6 +9,7 @@ import java.util.HashSet;
 
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_EDITION;
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_ID;
+import static com.gbdecastro.library.domain.book.BookConstant.BOOK_PRICE;
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_PUB_YEAR;
 import static com.gbdecastro.library.domain.book.BookConstant.BOOK_TITLE;
 import static com.gbdecastro.library.domain.subject.SubjectConstant.SUBJECT_DESCRIPTION;
@@ -28,7 +29,7 @@ public class SubjectTest extends BaseDomainTest {
     @Test
     @DisplayName("Add a book to the subject's collection")
     void addBook_shouldAddBook() {
-        givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR);
+        givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR, BOOK_PRICE);
         givenASubjectToBook(bookTest, subjectTest);
 
         assertTrue(subjectTest.getBooks().contains(bookTest));
@@ -38,7 +39,7 @@ public class SubjectTest extends BaseDomainTest {
     @Test
     @DisplayName("Remove a book from the subject's collection")
     void removeBook_shouldRemoveBook() {
-        givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR);
+        givenBook(BOOK_ID, BOOK_TITLE, BOOK_EDITION, BOOK_PUB_YEAR, BOOK_PRICE);
         givenASubjectToBook(bookTest, subjectTest);
 
         subjectTest.removeBook(bookTest);

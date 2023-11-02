@@ -28,6 +28,7 @@ export const I18N_EN = {
     BOOKS: {
         TITLE: "Title",
         EDITION: "Edition",
+        PRICE: "Price",
         PUBLICATION_YEAR: "Publication Year",
         ADD: "Add Book",
         MANAGEMENT: "Management Book",

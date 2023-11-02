@@ -47,7 +47,13 @@ module.exports = function (config) {
             failFast: false, // test would finish with error when a first fail occurs.
         },
         reporters: ["spec", "kjhtml"],
-        browsers: ["ChromeHeadless"],
+        browsers: ['Chrome', 'ChromeHeadless', 'ChromeHeadlessCI'],
+        customLaunchers: {
+            ChromeHeadlessCI: {
+                base: 'ChromeHeadless',
+                flags: ['--no-sandbox']
+            }
+        },
         singleRun: true,
         restartOnFileChange: false,
     });
